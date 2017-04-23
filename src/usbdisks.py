@@ -16,13 +16,22 @@ class Disk():
 def get_disks():
     disks = []
     for name in os.listdir(PATH):
-        udev_device, sysname, bus, path = name.split("-", 3)
-        path = path.split('-')
-        if path[-1].startswith('part'):
-            part = path.pop(-1)
-        else:
-            part = None
-        path = '-'.join(path)
+        parts = name.split("-", 3)
+        if len(parts) == 4:
+            udev_device, sysname, bus, path = parts
+        elif len(parts) == 3:
+            udev_device, sysname, path = parts
+            bus = None
+        elif len(parts) == 2:
+            udev_device, sysname = parts
+            path = None
+        if path:
+            path = path.split('-')
+            if path[-1].startswith('part'):
+                part = path.pop(-1)
+            else:
+                part = None
+            path = '-'.join(path)
         
         dev_name = os.readlink(os.path.join(PATH, name)).split('/')[-1]
         
