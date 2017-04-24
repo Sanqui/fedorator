@@ -1,5 +1,10 @@
 #:kivy 1.0.9
 
+<FlashMenu>:
+    size: root.width/2 - 8, 64
+    Button:
+        text: 'test'
+        size_hint: 1, 1
 
 <FedoratorMenu>:
     size_hint: 1, 1
@@ -16,6 +21,12 @@
         center_x: root.width / 2
         top: root.top - 4
         text: "Fedorator"
+        
+    Label:
+        font_size: 24
+        center_x: root.width / 2
+        top: root.top - 52
+        text: root.status_message
     
     Label:
         font_size: 16
@@ -40,5 +51,5 @@
         halign: 'right'
         valign: 'bottom'
         text: root.ip
-
     
+
