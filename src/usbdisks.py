@@ -12,8 +12,31 @@ class Disk():
     part = attrib()
     
     dev_name = attrib()
+    
+    size = attrib()
+
+@attrs
+class DiskSize():
+    major = attrib()
+    minor = attrib()
+    blocks = attrib()
+    bytes = attrib()
+
+def get_disk_sizes():
+    disk_sizes = {}
+    f = open('/proc/partitions')
+    f.readline()
+    f.readline()
+    for line in f.readlines():
+        major, minor, blocks, name = line.strip().split()
+        disk_sizes[name] = DiskSize(
+            major=int(major), minor=int(minor), blocks=int(blocks),
+            bytes=int(blocks)*1024) # XXX
+    
+    return disk_sizes
 
 def get_disks():
+    disk_sizes = get_disk_sizes()
     disks = []
     for name in os.listdir(PATH):
         parts = name.split("-", 3)
@@ -37,7 +60,8 @@ def get_disks():
         
         disk = Disk(udev_device=udev_device,
             sysname=sysname, bus=bus, path=path, part=part,
-            dev_name=dev_name)
+            dev_name=dev_name,
+            size=disk_sizes.get(dev_name))
         disks.append(disk)
     
     return disks

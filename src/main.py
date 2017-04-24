@@ -7,11 +7,17 @@ from kivy.clock import Clock
 import usbdisks
 
 class FedoratorMenu(Widget):
-    disk_text = StringProperty()
+    left_disk_text = StringProperty()
+    right_disk_text = StringProperty()
     
     def update_disks(self, dt):
         disks = usbdisks.get_usb_disks()
-        self.disk_text = ", ".join(disk.dev_name for disk in disks)
+        disk_texts = ["", ""]
+        for disk in disks[0:2]:
+            text = "{}: {:.3} GiB".format(disk.dev_name, disk.size.bytes/1024/1024/1024)
+            disk_texts.insert(0, text)
+        self.left_disk_text = disk_texts[0]
+        self.right_disk_text = disk_texts[1]
 
 class FedoratorApp(App):
     def build(self):

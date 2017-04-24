@@ -8,7 +8,7 @@
             
     Image:
         source: 'img/fedora.png'
-        pos: 8, 8
+        pos: 8, 32
         size: root.width - 16, root.width - 16
         
     Label:
@@ -19,7 +19,18 @@
     
     Label:
         font_size: 16
-        pos: 0, -36
-        text: root.disk_text
+        text_size: 128, 64
+        pos: 32, -12
+        halign: 'left'
+        valign: 'bottom'
+        text: root.left_disk_text
+        
+    Label:
+        font_size: 16
+        text_size: 128, 64
+        pos: root.width - 128, -12
+        halign: 'right'
+        valign: 'bottom'
+        text: root.right_disk_text
 
     
