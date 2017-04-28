@@ -1,4 +1,6 @@
 import subprocess
+import os
+import logging
 
 from kivy.app import App
 from kivy.uix.widget import Widget
@@ -55,4 +57,7 @@ class FedoratorApp(App):
 
 
 if __name__ == '__main__':
+    if os.getuid() != 0:
+        logging.log(logging.WARNING, "Warning: Running without root privildges.  Writes will not be possible.")
+
     FedoratorApp().run()
