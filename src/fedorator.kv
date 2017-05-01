@@ -1,14 +1,24 @@
 #:kivy 1.0.9
 
+<ImageButton@Button>:
+    source: None
+    background_color: 0, 0, 0, 0
+
+    Image:
+        source: root.source
+        pos: root.pos
+        size: root.size
+
 <FlashMenu>:
     FloatLayout:
         size_hint: 1, 1
-        Image:
+        
+        ImageButton:
             source: 'img/fedora.png'
-            pos: 8, root.height-128
+            pos_hint: {'x': 0.075, 'y': 1.0 - 0.3}
             size_hint: 0.3, 0.3
             
-            on_touch_up:
+            on_press:
                 root.manager.transition.direction = 'right'
                 root.manager.current = 'front'
         
@@ -21,6 +31,9 @@
         Button:
             text: 'Flash'
             size_hint: 1, 0.25
+            
+            on_press:
+                
 
 <FedoratorMenu>:
     GridLayout:

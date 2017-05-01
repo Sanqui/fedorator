@@ -24,7 +24,7 @@ class FedoratorMenu(Screen):
     
     ip = StringProperty()
     
-    ready = BooleanProperty()
+    ready = BooleanProperty(False)
     
     def on_touch_up(self, touch):
         if self.ready:
