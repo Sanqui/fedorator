@@ -36,7 +36,8 @@ class FedoratorMenu(Screen):
         disks = usbdisks.get_usb_disks()
         disk_texts = ["", ""]
         for disk in disks[0:2]:
-            text = "{}: {:.3} GiB".format(disk.dev_name, disk.size.bytes/1024/1024/1024)
+            disk_bytes = disk.size.bytes if disk.size else "???"
+            text = "{}: {:.3} GiB".format(disk.dev_name, disk_bytes/1024/1024/1024)
             disk_texts.insert(0, text)
 
         self.left_disk_text = disk_texts[0]
