@@ -1,55 +1,73 @@
 #:kivy 1.0.9
 
 <FlashMenu>:
-    size: root.width/2 - 8, 64
-    Button:
-        text: 'test'
+    FloatLayout:
         size_hint: 1, 1
+        Image:
+            source: 'img/fedora.png'
+            pos: 8, root.height-128
+            size_hint: 0.3, 0.3
+            
+            on_touch_up:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'front'
+        
+        Label:
+            font_size: 32
+            text_size: root.width * 0.6, None
+            pos_hint: {'x': 0.25, 'y': 0.35}
+            text: "Please choose an image"
+            
+        Button:
+            text: 'Flash'
+            size_hint: 1, 0.25
 
 <FedoratorMenu>:
-    size_hint: 1, 1
-    pos_hint: {'center_x': .5, 'center_y': .5}
-    canvas:
+    GridLayout:
+        size_hint: 1, 1
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        canvas:
+                
+        Image:
+            source: 'img/fedora.png'
+            pos: 8, 32
+            size: root.width - 16, root.width - 16
             
-    Image:
-        source: 'img/fedora.png'
-        pos: 8, 32
-        size: root.width - 16, root.width - 16
+        Label:
+            font_size: 70  
+            center_x: root.width / 2
+            top: root.top - 4
+            text: "Fedorator"
+            
+        Label:
+            font_size: 24
+            center_x: root.width / 2
+            top: root.top - 52
+            text: root.status_message
         
-    Label:
-        font_size: 70  
-        center_x: root.width / 2
-        top: root.top - 4
-        text: "Fedorator"
+        Label:
+            font_size: 16
+            text_size: 128, 64
+            pos: 32, -12
+            halign: 'left'
+            valign: 'bottom'
+            text: root.left_disk_text
+            
+        Label:
+            font_size: 16
+            text_size: 128, 64
+            pos: root.width - 128, -12
+            halign: 'right'
+            valign: 'bottom'
+            text: root.right_disk_text
         
-    Label:
-        font_size: 24
-        center_x: root.width / 2
-        top: root.top - 52
-        text: root.status_message
-    
-    Label:
-        font_size: 16
-        text_size: 128, 64
-        pos: 32, -12
-        halign: 'left'
-        valign: 'bottom'
-        text: root.left_disk_text
+        Label:
+            font_size: 16
+            text_size: 128, 64
+            pos: root.width/2, root.height - 38
+            halign: 'right'
+            valign: 'bottom'
+            text: root.ip
         
-    Label:
-        font_size: 16
-        text_size: 128, 64
-        pos: root.width - 128, -12
-        halign: 'right'
-        valign: 'bottom'
-        text: root.right_disk_text
-    
-    Label:
-        font_size: 16
-        text_size: 128, 64
-        pos: root.width/2, root.height - 38
-        halign: 'right'
-        valign: 'bottom'
-        text: root.ip
-    
+        
 

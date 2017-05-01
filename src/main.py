@@ -7,13 +7,16 @@ from kivy.uix.widget import Widget
 from kivy.properties import BooleanProperty, NumericProperty, StringProperty, ObjectProperty, ReferenceListProperty
 from kivy.vector import Vector
 from kivy.clock import Clock
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 import usbdisks
 
-class FlashMenu(Widget):
+sm = ScreenManager()
+
+class FlashMenu(Screen):
     pass
 
-class FedoratorMenu(Widget):
+class FedoratorMenu(Screen):
     left_disk_text = StringProperty()
     right_disk_text = StringProperty()
     
@@ -26,6 +29,8 @@ class FedoratorMenu(Widget):
     def on_touch_up(self, touch):
         if self.ready:
             self.status_message="Touched"
+            self.manager.transition.direction = 'left'
+            self.manager.current = 'flash'
     
     def update_disks(self, dt):
         disks = usbdisks.get_usb_disks()
@@ -50,10 +55,12 @@ class FedoratorMenu(Widget):
 
 class FedoratorApp(App):
     def build(self):
-        menu = FedoratorMenu()
-        Clock.schedule_interval(menu.update_disks, 1.0)
-        Clock.schedule_interval(menu.update_ip, 2.0)
-        return menu
+        fedorator_menu = FedoratorMenu(name="front")
+        sm.add_widget(fedorator_menu)
+        sm.add_widget(FlashMenu(name="flash"))
+        Clock.schedule_interval(fedorator_menu.update_disks, 1.0)
+        Clock.schedule_interval(fedorator_menu.update_ip, 2.0)
+        return sm
 
 
 if __name__ == '__main__':
