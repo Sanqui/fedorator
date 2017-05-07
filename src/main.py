@@ -1,6 +1,7 @@
 import subprocess
-import os
+import os, os.path
 import logging
+import json
 
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
@@ -20,7 +21,9 @@ import usbdisks
 
 DEBUG = True
 
-selected_image = {"name": ""}
+releases = json.load(open("data/releases.json"))
+release_metadata = json.load(open("data/metadata.json"))
+selected_release = {}
 
 sm = ScreenManager()
 
@@ -29,27 +32,34 @@ class ReleaseButton(RelativeLayout):
     source = StringProperty()
     
     def on_press(self):
-        selected_image['name'] = self.text
+        selected_release['name'] = self.text
         
         sm.transition.direction = 'left'
         sm.current = 'detail'
 
 class DetailMenu(Screen):
-    image_name = StringProperty()
+    release_name = StringProperty()
     def build(self):
         pass
     
     def on_pre_enter(self):
-        self.image_name = selected_image['name']
+        self.release_name = selected_release['name']
 
 class ListMenu(Screen):
     def build(self):
-        self.image_grid.bind(minimum_height=self.image_grid.setter('height'))
-        for i in range(100):
+        self.release_grid.bind(minimum_height=self.release_grid.setter('height'))
+        for metadata in release_metadata:
             btn = ReleaseButton()
-            btn.text = "Release {}".format(i)
-            btn.source = "img/workstation-logo.png"
-            self.image_grid.add_widget(btn)
+            btn.text = metadata['name']
+            logo_tips = ("{}-logo_color.png", "{}_icon_grey_pattern.png", "media-optical-symbolic.png")
+            for filename in logo_tips:
+                path = "img/logos/png/"+filename.format(metadata['subvariant'])
+                if os.path.isfile(path):
+                    image = path
+                    break
+            
+            btn.source = image
+            self.release_grid.add_widget(btn)
         
 
 class FedoratorMenu(Screen):

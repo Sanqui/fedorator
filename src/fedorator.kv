@@ -54,11 +54,11 @@
             font_size: 32
             text_size: root.width * 0.6, None
             pos_hint: {'x': 0.25, 'y': 0.35}
-            text: root.image_name
+            text: root.release_name
 
 <ListMenu>:
     scroll_view: scroll_view
-    image_grid: image_grid
+    release_grid: release_grid
     
     FloatLayout:
         size_hint: 1, 1
@@ -76,7 +76,7 @@
             font_size: 32
             text_size: root.width * 0.6, None
             pos_hint: {'x': 0.25, 'y': 0.35}
-            text: "Please choose an image"
+            text: "Please choose a release"
         
         ScrollView:
             id: scroll_view
@@ -84,7 +84,7 @@
             size: (root.width, root.height * 0.7)
             
             GridLayout:
-                id: image_grid
+                id: release_grid
                 cols: 1
                 spacing: 8
                 size_hint_y: None
