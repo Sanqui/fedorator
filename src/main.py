@@ -23,27 +23,29 @@ DEBUG = True
 
 releases = json.load(open("data/releases.json"))
 release_metadata = json.load(open("data/metadata.json"))
-selected_release = {}
 
 sm = ScreenManager()
 
 class ReleaseButton(RelativeLayout):
     text = StringProperty()
     source = StringProperty()
+    release_metadata = ObjectProperty()
     
     def on_press(self):
-        selected_release['name'] = self.text
+        app.selected_release_metadata = self.release_metadata
         
         sm.transition.direction = 'left'
         sm.current = 'detail'
 
 class DetailMenu(Screen):
     release_name = StringProperty()
+    release_image = StringProperty()
     def build(self):
         pass
     
     def on_pre_enter(self):
-        self.release_name = selected_release['name']
+        self.release_name = app.selected_release_metadata['name']
+        self.release_image = app.selected_release_metadata['image']
 
 class ListMenu(Screen):
     def build(self):
@@ -57,8 +59,9 @@ class ListMenu(Screen):
                 if os.path.isfile(path):
                     image = path
                     break
-            
+            metadata['image'] = image
             btn.source = image
+            btn.release_metadata = metadata
             self.release_grid.add_widget(btn)
         
 
@@ -101,6 +104,7 @@ class FedoratorMenu(Screen):
     
 
 class FedoratorApp(App):
+    selected_release_metadata = ObjectProperty()
     def build(self):
         fedorator_menu = FedoratorMenu(name="front")
         sm.add_widget(fedorator_menu)
@@ -123,5 +127,6 @@ class FedoratorApp(App):
 if __name__ == '__main__':
     if os.getuid() != 0:
         logging.log(logging.WARNING, "Warning: Running without root privildges.  Writes will not be possible.")
-
-    FedoratorApp().run()
+    
+    app = FedoratorApp()
+    app.run()

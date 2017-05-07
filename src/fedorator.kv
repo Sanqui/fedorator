@@ -45,8 +45,8 @@
         size_hint: 1, 1
         
         ImageButton:
-            source: 'img/fedora.png'
-            pos_hint: {'x': 0.075, 'y': 1.0 - 0.3}
+            source: root.release_image
+            pos_hint: {'x': 0.025, 'y': 1.0 - 0.3}
             size_hint: 0.3, 0.3
             
             on_press:
@@ -56,7 +56,7 @@
         Label:
             font_size: 32
             text_size: root.width * 0.6, None
-            pos_hint: {'x': 0.25, 'y': 0.35}
+            pos_hint: {'x': 0.20, 'y': 0.35}
             text: root.release_name
 
 <ListMenu>:
