@@ -17,23 +17,26 @@
     
     Button:
         source: None
-        text: root.text
         size_hint: (1.0, 1.0)
         pos: (0, 0)
-        text_size: (self.width - 60, self.height)
-        valign: 'middle'
-        halign: 'right'
-        font_size: 20
         
         background_color: (1, 1, 1, 0.5)
         
         on_press:
             root.on_press()
-        
+    
+    Label:
+        pos: (-root.width + 120 + (root.width - 60), 0)
+        text_size: (root.width - 120 - 20, root.height)
+        halign: "left"
+        valign: "middle"
+        text: root.text
+        font_size: 20
+    
     Image:
         source: root.source
-        size_hint: (1.0, 1.0)
-        pos: (-root.width/2 + 60 + 8, 0)
+        size_hint: (1.0, 0.9)
+        pos: (-root.width/2 + 60 + 4, root.height * 0.05)
 #        pos: ctx.pos
 #        size: ctx.size
 
