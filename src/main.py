@@ -12,8 +12,13 @@ from kivy.properties import BooleanProperty, NumericProperty, StringProperty, Ob
 from kivy.vector import Vector
 from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.factory import Factory
+from kivy.lang import Builder
 
 import usbdisks
+
+DEBUG = True
+
 
 sm = ScreenManager()
 
@@ -21,7 +26,8 @@ class FlashMenu(Screen):
     def build(self):
         self.image_grid.bind(minimum_height=self.image_grid.setter('height'))
         for i in range(100):
-            btn = Button(text=str(i), size_hint_y=None, height=120)
+            btn = Builder.template('ReleaseButton', text="Release {}".format(i),
+                source="img/workstation-logo.png")
             self.image_grid.add_widget(btn)
         
 
@@ -70,6 +76,9 @@ class FedoratorApp(App):
         flash_menu = FlashMenu(name="flash")
         flash_menu.build()
         sm.add_widget(flash_menu)
+        
+        if DEBUG:
+            sm.current = 'flash'
         
         
         Clock.schedule_interval(fedorator_menu.update_disks, 1.0)

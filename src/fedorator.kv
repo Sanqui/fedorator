@@ -9,6 +9,32 @@
         pos: root.pos
         size: root.size
 
+[ReleaseButton@RelativeLayout]:
+    height: 120
+    width: root.width
+    size_hint_x: 1.0
+    size_hint_y: None
+    
+    Button:
+        source: None
+        text: ctx.text
+        size_hint: (1.0, 1.0)
+        pos: (0, 0)
+        text_size: (self.width - 60, self.height)
+        text_pos: (128, 0)
+        valign: 'middle'
+        halign: 'right'
+        font_size: 20
+        
+        background_color: (1, 1, 1, 0.5)
+        
+    Image:
+        source: ctx.source
+        size_hint: (1.0, 1.0)
+        pos: (-root.width/2 + 60 + 8, 0)
+#        pos: ctx.pos
+#        size: ctx.size
+
 <FlashMenu>:
     scroll_view: scroll_view
     image_grid: image_grid
@@ -39,7 +65,7 @@
             GridLayout:
                 id: image_grid
                 cols: 1
-                spacing: 10
+                spacing: 8
                 size_hint_y: None
         
 #        Button:
