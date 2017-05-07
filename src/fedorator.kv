@@ -9,7 +9,7 @@
         pos: root.pos
         size: root.size
 
-[ReleaseButton@RelativeLayout]:
+<ReleaseButton>:
     height: 120
     width: root.width
     size_hint_x: 1.0
@@ -17,25 +17,46 @@
     
     Button:
         source: None
-        text: ctx.text
+        text: root.text
         size_hint: (1.0, 1.0)
         pos: (0, 0)
         text_size: (self.width - 60, self.height)
-        text_pos: (128, 0)
         valign: 'middle'
         halign: 'right'
         font_size: 20
         
         background_color: (1, 1, 1, 0.5)
         
+        on_press:
+            root.on_press()
+        
     Image:
-        source: ctx.source
+        source: root.source
         size_hint: (1.0, 1.0)
         pos: (-root.width/2 + 60 + 8, 0)
 #        pos: ctx.pos
 #        size: ctx.size
 
-<FlashMenu>:
+<DetailMenu>:
+    RelativeLayout:
+        size_hint: 1, 1
+        
+        ImageButton:
+            source: 'img/fedora.png'
+            pos_hint: {'x': 0.075, 'y': 1.0 - 0.3}
+            size_hint: 0.3, 0.3
+            
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'list'
+        
+        Label:
+            font_size: 32
+            text_size: root.width * 0.6, None
+            pos_hint: {'x': 0.25, 'y': 0.35}
+            text: root.image_name
+
+<ListMenu>:
     scroll_view: scroll_view
     image_grid: image_grid
     

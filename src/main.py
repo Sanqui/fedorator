@@ -4,6 +4,7 @@ import logging
 
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
@@ -19,15 +20,35 @@ import usbdisks
 
 DEBUG = True
 
+selected_image = {"name": ""}
 
 sm = ScreenManager()
 
-class FlashMenu(Screen):
+class ReleaseButton(RelativeLayout):
+    text = StringProperty()
+    source = StringProperty()
+    
+    def on_press(self):
+        selected_image['name'] = self.text
+        
+        sm.transition.direction = 'left'
+        sm.current = 'detail'
+
+class DetailMenu(Screen):
+    image_name = StringProperty()
+    def build(self):
+        pass
+    
+    def on_pre_enter(self):
+        self.image_name = selected_image['name']
+
+class ListMenu(Screen):
     def build(self):
         self.image_grid.bind(minimum_height=self.image_grid.setter('height'))
         for i in range(100):
-            btn = Builder.template('ReleaseButton', text="Release {}".format(i),
-                source="img/workstation-logo.png")
+            btn = ReleaseButton()
+            btn.text = "Release {}".format(i)
+            btn.source = "img/workstation-logo.png"
             self.image_grid.add_widget(btn)
         
 
@@ -45,7 +66,7 @@ class FedoratorMenu(Screen):
         if self.ready:
             self.status_message="Touched"
             self.manager.transition.direction = 'left'
-            self.manager.current = 'flash'
+            self.manager.current = 'list'
     
     def update_disks(self, dt):
         disks = usbdisks.get_usb_disks()
@@ -73,12 +94,15 @@ class FedoratorApp(App):
     def build(self):
         fedorator_menu = FedoratorMenu(name="front")
         sm.add_widget(fedorator_menu)
-        flash_menu = FlashMenu(name="flash")
-        flash_menu.build()
-        sm.add_widget(flash_menu)
+        list_menu = ListMenu(name="list")
+        list_menu.build()
+        sm.add_widget(list_menu)
+        detail_menu = DetailMenu(name="detail")
+        detail_menu.build()
+        sm.add_widget(detail_menu)
         
         if DEBUG:
-            sm.current = 'flash'
+            sm.current = 'list'
         
         
         Clock.schedule_interval(fedorator_menu.update_disks, 1.0)
