@@ -1,5 +1,14 @@
 #:kivy 1.0.9
 
+<BackLabel@Label>:
+    font_size: 12
+    size_hint: 0.3, 0.3
+    text_size: 64, 32
+    halign: "left"
+    valign: "top"
+    pos_hint: {'x': -0.04, 'y': 0.82}
+    text: "<- back"
+
 <ImageButton@Button>:
     source: None
     background_color: 0, 0, 0, 0
@@ -58,6 +67,8 @@
             text_size: root.width * 0.6, None
             pos_hint: {'x': 0.20, 'y': 0.35}
             text: root.release_name
+        
+        BackLabel:
 
 <ListMenu>:
     scroll_view: scroll_view
@@ -92,11 +103,7 @@
                 spacing: 8
                 size_hint_y: None
         
-#        Button:
-#            text: 'Flash'
-#            size_hint: 1, 0.25
-#            
-#            on_press:
+        BackLabel:
                 
 
 <FedoratorMenu>:
