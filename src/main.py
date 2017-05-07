@@ -21,18 +21,24 @@ import usbdisks
 
 DEBUG = True
 
-releases = json.load(open("data/releases.json"))
-release_metadata = json.load(open("data/metadata.json"))
+images = json.load(open("data/releases.json"))
+releases = json.load(open("data/metadata.json"))
+
+for release in releases:
+    release['images'] = []
+    for image in images:
+        if image['subvariant'].lower() == release['subvariant'].lower():
+            release['images'].append(image)
 
 sm = ScreenManager()
 
 class ReleaseButton(RelativeLayout):
     text = StringProperty()
     source = StringProperty()
-    release_metadata = ObjectProperty()
+    release = ObjectProperty()
     
     def on_press(self):
-        app.selected_release_metadata = self.release_metadata
+        app.selected_release = self.release
         
         sm.transition.direction = 'left'
         sm.current = 'detail'
@@ -40,17 +46,36 @@ class ReleaseButton(RelativeLayout):
 class DetailMenu(Screen):
     release_name = StringProperty()
     release_image = StringProperty()
+    release_summary = StringProperty()
+    
     def build(self):
         pass
     
     def on_pre_enter(self):
-        self.release_name = app.selected_release_metadata['name']
-        self.release_image = app.selected_release_metadata['image']
+        release = app.selected_release
+        self.release_name = release['name']
+        self.release_image = release['image']
+        self.release_summary = release['summary']
+        
+        for parameter in ('version', 'arch'):
+            dropdown = getattr(self, "dropdown_"+parameter)
+            mainbutton = getattr(self, "mainbutton_"+parameter)
+            options = set([image[parameter] for image in release['images']])
+            
+            dropdown.clear_widgets()
+            for option in options:
+                btn = Button(text=option, size_hint_y=None, height=44)
+                btn.bind(on_release=lambda btn, d=dropdown: d.select(btn.text))
+                dropdown.add_widget(btn)
+            
+            mainbutton.bind(on_release=dropdown.open)
+            dropdown.bind(on_select=lambda instance, x, m=mainbutton: setattr(m, 'text', x))
+            dropdown.dismiss()
 
 class ListMenu(Screen):
     def build(self):
         self.release_grid.bind(minimum_height=self.release_grid.setter('height'))
-        for metadata in release_metadata:
+        for metadata in releases:
             btn = ReleaseButton()
             btn.text = metadata['name']
             logo_tips = ("{}-logo_color.png", "{}_icon_grey_pattern.png", "media-optical-symbolic.png")
@@ -61,7 +86,7 @@ class ListMenu(Screen):
                     break
             metadata['image'] = image
             btn.source = image
-            btn.release_metadata = metadata
+            btn.release = metadata
             self.release_grid.add_widget(btn)
         
 
@@ -104,7 +129,9 @@ class FedoratorMenu(Screen):
     
 
 class FedoratorApp(App):
-    selected_release_metadata = ObjectProperty()
+    selected_release = ObjectProperty()
+    selected_releases = ObjectProperty()
+    
     def build(self):
         fedorator_menu = FedoratorMenu(name="front")
         sm.add_widget(fedorator_menu)

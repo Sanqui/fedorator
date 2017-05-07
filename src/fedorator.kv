@@ -46,13 +46,17 @@
         source: root.source
         size_hint: (1.0, 0.9)
         pos: (-root.width/2 + 60 + 4, root.height * 0.05)
-#        pos: ctx.pos
-#        size: ctx.size
 
 <DetailMenu>:
+    dropdown_version:   dropdown_version
+    dropdown_arch:      dropdown_arch
+    mainbutton_version: mainbutton_version
+    mainbutton_arch:    mainbutton_arch
+    
     RelativeLayout:
         size_hint: 1, 1
         
+        BackLabel:
         ImageButton:
             source: root.release_image
             pos_hint: {'x': 0.025, 'y': 1.0 - 0.3}
@@ -68,7 +72,36 @@
             pos_hint: {'x': 0.20, 'y': 0.35}
             text: root.release_name
         
-        BackLabel:
+        Label:
+            font_size: 18
+            text_size: root.width * 0.9, None
+            
+            pos_hint: {'x': 0.0, 'y': 0.1675}
+            text: root.release_summary
+        
+        DropDown:
+            id: dropdown_version
+            
+        DropDown:
+            id: dropdown_arch
+        
+        GridLayout:
+            size_hint: 0.9, 0.2
+            pos_hint: {'x': 0.0, 'y': 0.35}
+            cols: 2
+            spacing: 8
+            
+            Label:
+                text: "Version"
+            
+            Button:
+                id: mainbutton_version
+            
+            Label:
+                text: "Architecture"
+                
+            Button:
+                id: mainbutton_arch
 
 <ListMenu>:
     scroll_view: scroll_view
@@ -77,6 +110,7 @@
     FloatLayout:
         size_hint: 1, 1
         
+        BackLabel:
         ImageButton:
             source: 'img/fedora.png'
             pos_hint: {'x': 0.075, 'y': 1.0 - 0.3}
@@ -103,7 +137,6 @@
                 spacing: 8
                 size_hint_y: None
         
-        BackLabel:
                 
 
 <FedoratorMenu>:
