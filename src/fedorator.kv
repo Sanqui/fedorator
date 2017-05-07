@@ -10,6 +10,9 @@
         size: root.size
 
 <FlashMenu>:
+    scroll_view: scroll_view
+    image_grid: image_grid
+    
     FloatLayout:
         size_hint: 1, 1
         
@@ -27,12 +30,23 @@
             text_size: root.width * 0.6, None
             pos_hint: {'x': 0.25, 'y': 0.35}
             text: "Please choose an image"
+        
+        ScrollView:
+            id: scroll_view
+            size_hint: (1, None)
+            size: (root.width, root.height * 0.7)
             
-        Button:
-            text: 'Flash'
-            size_hint: 1, 0.25
-            
-            on_press:
+            GridLayout:
+                id: image_grid
+                cols: 1
+                spacing: 10
+                size_hint_y: None
+        
+#        Button:
+#            text: 'Flash'
+#            size_hint: 1, 0.25
+#            
+#            on_press:
                 
 
 <FedoratorMenu>:

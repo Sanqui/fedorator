@@ -3,6 +3,10 @@ import os
 import logging
 
 from kivy.app import App
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.button import Button
+from kivy.uix.scrollview import ScrollView
+from kivy.core.window import Window
 from kivy.uix.widget import Widget
 from kivy.properties import BooleanProperty, NumericProperty, StringProperty, ObjectProperty, ReferenceListProperty
 from kivy.vector import Vector
@@ -14,7 +18,12 @@ import usbdisks
 sm = ScreenManager()
 
 class FlashMenu(Screen):
-    pass
+    def build(self):
+        self.image_grid.bind(minimum_height=self.image_grid.setter('height'))
+        for i in range(100):
+            btn = Button(text=str(i), size_hint_y=None, height=120)
+            self.image_grid.add_widget(btn)
+        
 
 class FedoratorMenu(Screen):
     left_disk_text = StringProperty()
@@ -58,7 +67,11 @@ class FedoratorApp(App):
     def build(self):
         fedorator_menu = FedoratorMenu(name="front")
         sm.add_widget(fedorator_menu)
-        sm.add_widget(FlashMenu(name="flash"))
+        flash_menu = FlashMenu(name="flash")
+        flash_menu.build()
+        sm.add_widget(flash_menu)
+        
+        
         Clock.schedule_interval(fedorator_menu.update_disks, 1.0)
         Clock.schedule_interval(fedorator_menu.update_ip, 2.0)
         return sm
