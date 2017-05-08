@@ -18,17 +18,9 @@ from kivy.factory import Factory
 from kivy.lang import Builder
 
 import usbdisks
+from releases import *
 
 DEBUG = True
-
-images = json.load(open("data/releases.json"))
-releases = json.load(open("data/metadata.json"))
-
-for release in releases:
-    release['images'] = []
-    for image in images:
-        if image['subvariant'].lower() == release['subvariant'].lower():
-            release['images'].append(image)
 
 sm = ScreenManager()
 
