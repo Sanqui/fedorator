@@ -63,6 +63,22 @@ class DetailMenu(Screen):
             mainbutton.bind(on_release=dropdown.open)
             dropdown.bind(on_select=lambda instance, x, m=mainbutton: setattr(m, 'text', x))
             dropdown.dismiss()
+    
+    def flash(self):
+        self.flash_button.disabled = True
+        self.back_button.disabled = True
+        self.mainbutton_version.disabled = True
+        self.mainbutton_arch.disabled = True
+        self.back_label.color = (0, 0, 0, 0)
+        self.status_label.text = "Flashing..."
+        
+        Clock.schedule_interval(self.update_progress, 0.05)
+    
+    def update_progress(self, dt):
+        self.progress.value += 0.9
+        
+        if int(self.progress.value) >= 100:
+            self.status_label.text = "Done!"
 
 class ListMenu(Screen):
     def build(self):
@@ -94,7 +110,7 @@ class FedoratorMenu(Screen):
     
     def on_touch_up(self, touch):
         if self.ready:
-            self.status_message="Touched"
+            #self.status_message="Touched"
             self.manager.transition.direction = 'left'
             self.manager.current = 'list'
     

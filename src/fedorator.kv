@@ -7,6 +7,7 @@
     halign: "left"
     valign: "top"
     pos_hint: {'x': -0.04, 'y': 0.82}
+    color: (1, 1, 1, 1)
     text: "<- back"
 
 <ImageButton@Button>:
@@ -52,12 +53,19 @@
     dropdown_arch:      dropdown_arch
     mainbutton_version: mainbutton_version
     mainbutton_arch:    mainbutton_arch
+    flash_button: flash_button
+    back_button: back_button
+    back_label: back_label
+    status_label: status_label
+    progress: progress
     
     RelativeLayout:
         size_hint: 1, 1
         
         BackLabel:
+            id: back_label
         ImageButton:
+            id: back_button
             source: root.release_image
             pos_hint: {'x': 0.025, 'y': 1.0 - 0.3}
             size_hint: 0.3, 0.3
@@ -102,6 +110,26 @@
                 
             Button:
                 id: mainbutton_arch
+        
+        Button:
+            id: flash_button
+            size_hint: 0.95, 0.2
+            pos_hint: {'x': 0.025, 'y': 0.025}
+            text: "Flash"
+            on_press: root.flash()
+        
+        Label:
+            id: status_label
+            pos_hint: {'x': 0, 'y': -0.2}
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+        
+        ProgressBar:
+            id: progress
+            size_hint: 0.9, 1
+            pos_hint: {'x': 0.05, 'y': -0.25}
+
 
 <ListMenu>:
     scroll_view: scroll_view
