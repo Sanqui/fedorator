@@ -57,6 +57,7 @@
     back_button: back_button
     back_label: back_label
     status_label: status_label
+    progress_label: progress_label
     progress: progress
     
     RelativeLayout:
@@ -124,6 +125,15 @@
             text_size: self.size
             halign: 'center'
             valign: 'middle'
+        
+        Label:
+            id: progress_label
+            pos_hint: {'x': 0, 'y': -0.21}
+            text_size: self.size
+            halign: 'right'
+            valign: 'middle'
+            font_size: 12
+            color: (1, 1, 1, 0.5)
         
         ProgressBar:
             id: progress

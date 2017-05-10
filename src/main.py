@@ -112,7 +112,9 @@ class DetailMenu(Screen):
         Clock.schedule_interval(self.update_progress, 0.05)
     
     def update_progress(self, dt):
-        self.progress.value = self.flash_thread.value / self.flash_thread.max
+        ft = self.flash_thread
+        self.progress.value = ft.value / ft.max
+        self.progress_label.text = "{}/{}MiB ".format(ft.value / (1024**2), ft.max / (1024**2))
         
         if int(self.progress.value) == 1:
             self.status_label.text = "Done!"
