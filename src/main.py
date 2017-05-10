@@ -63,6 +63,10 @@ class DetailMenu(Screen):
             mainbutton.bind(on_release=dropdown.open)
             dropdown.bind(on_select=lambda instance, x, m=mainbutton: setattr(m, 'text', x))
             dropdown.dismiss()
+        
+        self.mainbutton_arch.text = DEFAULT_ARCH
+        self.mainbutton_version.text = str(DEFAULT_VERSION)
+        
     
     def flash(self):
         self.flash_button.disabled = True

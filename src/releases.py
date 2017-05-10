@@ -11,6 +11,9 @@ VERSION = 25
 ARCH_PRIORITY = ["x86_64", "i386"]
 SUBVARIANT_PRIORITY = ["workstation", "server", "kde", "xfce", "lxde"]
 
+DEFAULT_ARCH = ARCH_PRIORITY[0]
+DEFAULT_VERSION = VERSION
+
 DOWNLOAD_DIRECTORY = "iso"
 BUFFSIZE = (1024 ** 2) * 4 # 4MB
 
@@ -44,6 +47,7 @@ for release in releases:
     for image in images:
         if image['subvariant'].lower() == release['subvariant'].lower():
             release['images'].append(image)
+    release['images'].sort(key=lambda image: ARCH_PRIORITY.index(image['arch']) if image['arch'] in ARCH_PRIORITY else 9)
 
 downloaded_images = listdir("iso/")
 downloaded_images.remove("README")
