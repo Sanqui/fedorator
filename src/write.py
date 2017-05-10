@@ -7,6 +7,9 @@ from tqdm import tqdm
 
 BUFFSIZE = (1024 ** 2) * 2 # 2MB
 
+def filesize(filepath):
+    return os.path.getsize(filepath)
+
 def write(filepath, target):
     filesize = os.path.getsize(filepath)
     fin = open(filepath, 'rb')
@@ -17,7 +20,6 @@ def write(filepath, target):
     while True:
         copied = sendfile(fout.fileno(), fin.fileno(), offset, BUFFSIZE)
         if not copied: break
-        pbar.update(copied)
         offset += copied
         
         yield copied
@@ -26,7 +28,7 @@ def write(filepath, target):
 if __name__ == "__main__":
     filepath = sys.argv[1]
     target = sys.argv[2]
-    filesize = os.path.getsize(filepath)
+    filesize = filesize(filepath)
     
     
     with tqdm(total=filesize, unit='B', unit_scale=True) as pbar:

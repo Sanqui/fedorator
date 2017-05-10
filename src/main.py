@@ -2,6 +2,7 @@ import subprocess
 import os, os.path
 import logging
 import json
+import threading
 
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
@@ -18,11 +19,26 @@ from kivy.factory import Factory
 from kivy.lang import Builder
 
 import usbdisks
+import write
 from releases import *
 
 DEBUG = True
 
 sm = ScreenManager()
+
+class FlashThread(threading.Thread):
+    def __init__(self, source, destination, **kvargs):
+        super().__init__(**kvargs)
+        self.source = source
+        self.destination = destination
+        
+        self.max = write.filesize(self.source)
+        self.value = 0
+        
+    def run(self):
+        for copied in write.write(self.source, self.destination):
+            self.value += copied
+
 
 class ReleaseButton(RelativeLayout):
     text = StringProperty()
@@ -39,6 +55,8 @@ class DetailMenu(Screen):
     release_name = StringProperty()
     release_image = StringProperty()
     release_summary = StringProperty()
+    flash_thread = ObjectProperty()
+    image = ObjectProperty()
     
     def build(self):
         pass
@@ -76,12 +94,27 @@ class DetailMenu(Screen):
         self.back_label.color = (0, 0, 0, 0)
         self.status_label.text = "Flashing..."
         
+        arch = self.mainbutton_arch.text
+        version = self.mainbutton_version.text
+        
+        release = app.selected_release
+        image = None
+        for i in release['images']:
+            if i['arch'] == arch and i['version'] == version \
+              and 'netinst' not in i['link']:
+                image = i
+        
+        filename = image['link'].split('/')[-1]
+        filepath = os.path.join("iso", filename)
+        self.flash_thread = FlashThread(filepath, app.disks[0].fs_path)
+        self.flash_thread.start()
+        
         Clock.schedule_interval(self.update_progress, 0.05)
     
     def update_progress(self, dt):
-        self.progress.value += 0.9
+        self.progress.value = self.flash_thread.value / self.flash_thread.max
         
-        if int(self.progress.value) >= 100:
+        if int(self.progress.value) == 1:
             self.status_label.text = "Done!"
 
 class ListMenu(Screen):
@@ -120,7 +153,8 @@ class FedoratorMenu(Screen):
             self.manager.current = 'list'
     
     def update_disks(self, dt):
-        disks = usbdisks.get_usb_disks()
+        disks = usbdisks.get_usb_disks(dummy=DEBUG)
+        app.disks = disks
         disk_texts = ["", ""]
         for disk in disks[0:2]:
             disk_gib = disk.size.bytes/(1024**3) if disk.size else "???"
@@ -153,6 +187,8 @@ class FedoratorMenu(Screen):
 class FedoratorApp(App):
     selected_release = ObjectProperty()
     selected_releases = ObjectProperty()
+    
+    disks = ObjectProperty()
     
     def build(self):
         fedorator_menu = FedoratorMenu(name="front")

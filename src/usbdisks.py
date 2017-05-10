@@ -12,6 +12,7 @@ class Disk():
     part = attrib()
     
     dev_name = attrib()
+    fs_path = attrib()
     
     size = attrib()
 
@@ -35,7 +36,7 @@ def get_disk_sizes():
     
     return disk_sizes
 
-def get_disks():
+def get_disks(dummy=False):
     disk_sizes = get_disk_sizes()
     disks = []
     for name in os.listdir(PATH):
@@ -61,12 +62,20 @@ def get_disks():
         disk = Disk(udev_device=udev_device,
             sysname=sysname, bus=bus, path=path, part=part,
             dev_name=dev_name,
-            size=disk_sizes.get(dev_name))
+            size=disk_sizes.get(dev_name),
+            fs_path="/dev/"+dev_name)
         disks.append(disk)
     
     return disks
 
-def get_usb_disks():
+def get_usb_disks(dummy=False):
+    if dummy:
+        # Return a single dummy disk pointing to a file named `dummy`.
+        disk = Disk(udev_device=None, sysname=None, bus=None,
+            path=None, part=None, dev_name="null", size=None,
+            fs_path="dummy")
+        return [disk]
+    
     disks = []
     for disk in get_disks():
         if disk.bus == 'usb' and not disk.part:
