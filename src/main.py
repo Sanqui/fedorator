@@ -107,6 +107,7 @@ class FedoratorMenu(Screen):
     ip = StringProperty()
     
     ready = BooleanProperty(False)
+    error_message = BooleanProperty(False)
     
     def on_touch_up(self, touch):
         if self.ready:
@@ -118,18 +119,27 @@ class FedoratorMenu(Screen):
         disks = usbdisks.get_usb_disks()
         disk_texts = ["", ""]
         for disk in disks[0:2]:
-            disk_bytes = disk.size.bytes if disk.size else "???"
-            text = "{}: {:.3} GiB".format(disk.dev_name, disk_bytes/1024/1024/1024)
+            disk_gib = disk.size.bytes/(1024**3) if disk.size else "???"
+            text = "{}: {:.3} GiB".format(disk.dev_name, disk_gib)
             disk_texts.insert(0, text)
 
         self.left_disk_text = disk_texts[0]
         self.right_disk_text = disk_texts[1]
         
         if disks:
+            self.error_message = False
             self.status_message = "Tap to begin"
             self.ready = True
         else:
-            self.status_message = "Please insert flash"
+            if sm.current != 'front':
+                sm.transition.direction = 'right'
+                sm.current = 'front'
+                
+                self.error_message = True
+                self.status_message = "USB removed!"
+            
+            if not self.error_message:
+                self.status_message = "Please insert flash"
             self.ready = False
     
     def update_ip(self, dt):
@@ -153,8 +163,8 @@ class FedoratorApp(App):
         if DEBUG:
             sm.current = 'list'
         
-        
-        Clock.schedule_interval(fedorator_menu.update_disks, 1.0)
+        fedorator_menu.update_ip(0)
+        Clock.schedule_interval(fedorator_menu.update_disks, 0.5)
         Clock.schedule_interval(fedorator_menu.update_ip, 2.0)
         return sm
 
