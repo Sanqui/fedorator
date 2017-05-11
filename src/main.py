@@ -34,10 +34,14 @@ class FlashThread(threading.Thread):
         
         self.max = write.filesize(self.source)
         self.value = 0
+        self.ex = None
         
     def run(self):
-        for copied in write.write(self.source, self.destination):
-            self.value += copied
+        try:
+            for copied in write.write(self.source, self.destination):
+                self.value += copied
+        except Exception as ex:
+            self.ex = ex
 
 
 class ReleaseButton(RelativeLayout):
@@ -105,7 +109,6 @@ class DetailMenu(Screen):
         
     
     def flash(self):
-        self.switch_disabled(True)
         arch = self.mainbutton_arch.text
         version = self.mainbutton_version.text
         
@@ -116,17 +119,30 @@ class DetailMenu(Screen):
               and 'netinst' not in i['link']:
                 image = i
         
+        assert image
         filename = image['link'].split('/')[-1]
         filepath = os.path.join("iso", filename)
+        if not os.path.isfile(filepath):
+            self.status_label.text = "Image not present!"
+            self.status_label.color = (1, 0, 0, 1)
+            return
+        
+        self.switch_disabled(True)
+        
         app.done_writing = False
         self.flash_thread = FlashThread(filepath, app.disks[0].fs_path)
         self.flash_thread.start()
+        self.status_label.color = (1, 1, 1, 1)
         self.status_label.text = "Flashing..."
         
         self.progress_clock = Clock.schedule_interval(self.update_progress, 0.05)
     
     def update_progress(self, dt):
         ft = self.flash_thread
+        if ft.ex:
+            self.status_label.color = (1, 0, 0, 1)
+            self.status_label.text = "Error: {}".format(type(ft.ex))
+            return
         self.progress.value = ft.value / ft.max
         self.progress_label.text = "{}/{}MiB ".format(round(ft.value / (1024**2)), round(ft.max / (1024**2)))
         
