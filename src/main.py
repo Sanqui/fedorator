@@ -22,7 +22,7 @@ import usbdisks
 import write
 from releases import *
 
-DEBUG = True
+DEBUG = False
 
 sm = ScreenManager()
 
@@ -58,10 +58,18 @@ class DetailMenu(Screen):
     flash_thread = ObjectProperty()
     image = ObjectProperty()
     
+    done = BooleanProperty()
+    
     def build(self):
         pass
     
     def on_pre_enter(self):
+        self.done = False
+        self.switch_disabled(False)
+        self.progress.value = 0
+        self.status_label.text = ""
+        self.progress_label.text = ""
+        
         release = app.selected_release
         self.release_name = release['name']
         self.release_image = release['image']
@@ -85,15 +93,16 @@ class DetailMenu(Screen):
         self.mainbutton_arch.text = DEFAULT_ARCH
         self.mainbutton_version.text = str(DEFAULT_VERSION)
         
+    def switch_disabled(self, disabled):
+        self.flash_button.disabled = disabled
+        self.back_button.disabled = disabled
+        self.mainbutton_version.disabled = disabled
+        self.mainbutton_arch.disabled = disabled
+        self.back_label.color = (0, 0, 0, 0) if disabled else (1, 1, 1, 1)
+        
     
     def flash(self):
-        self.flash_button.disabled = True
-        self.back_button.disabled = True
-        self.mainbutton_version.disabled = True
-        self.mainbutton_arch.disabled = True
-        self.back_label.color = (0, 0, 0, 0)
-        self.status_label.text = "Flashing..."
-        
+        self.switch_disabled(True)
         arch = self.mainbutton_arch.text
         version = self.mainbutton_version.text
         
@@ -108,8 +117,9 @@ class DetailMenu(Screen):
         filepath = os.path.join("iso", filename)
         self.flash_thread = FlashThread(filepath, app.disks[0].fs_path)
         self.flash_thread.start()
+        self.status_label.text = "Flashing..."
         
-        Clock.schedule_interval(self.update_progress, 0.05)
+        self.progress_clock = Clock.schedule_interval(self.update_progress, 0.05)
     
     def update_progress(self, dt):
         ft = self.flash_thread
@@ -118,6 +128,13 @@ class DetailMenu(Screen):
         
         if int(self.progress.value) == 1:
             self.status_label.text = "Done!"
+            self.done = True
+            self.progress_clock.cancel()
+    
+    def touch(self):
+        if self.done:
+            sm.transition.direction = 'right'
+            sm.current = 'front'
 
 class ListMenu(Screen):
     def build(self):
