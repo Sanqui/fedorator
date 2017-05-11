@@ -105,7 +105,6 @@ module rounded_cube(size, radius, thickness) {
 module shell() {
     difference() {
         union() {
-            rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_THICKNESS], SHELL_THICKNESS, -1);
             if (!HIDE_SHELL) rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_HEIGHT], SHELL_THICKNESS, SHELL_THICKNESS);
         }
         
@@ -191,6 +190,7 @@ module usb_port_support() {
 }
 
 module supports() {
+    rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_THICKNESS], SHELL_THICKNESS, -1);
     translate([0, 0, 0])
         support_pillar();
     translate([RPI_POSITIONING[0] + RPI_WIDTH_FULL + TOLERANCE, 0, 0])
@@ -232,11 +232,23 @@ module shell_cap() {
     }
 }
 
-supports();
-shell();
-shell_cap();
+difference(){
+    supports();
+    shell();
+}
+
+translate([100, 0, 0]) {
+    difference(){
+        shell();
+        supports();
+    }
+}
+//shell_cap();
 
 
 translate([0, RPID_HEIGHT, 0])
 translate(RPI_POSITIONING)
     rpid();
+
+//translate([100, 100, 100])
+//import("fedora.dxf");
