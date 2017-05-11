@@ -74,6 +74,7 @@ class DetailMenu(Screen):
         self.release_name = release['name']
         self.release_image = release['image']
         self.release_summary = release['summary']
+        choices = {}
         
         for parameter in ('version', 'arch'):
             dropdown = getattr(self, "dropdown_"+parameter)
@@ -81,7 +82,9 @@ class DetailMenu(Screen):
             options = set([image[parameter] for image in release['images']])
             
             dropdown.clear_widgets()
+            choices[parameter] = []
             for option in options:
+                choices[parameter].append(option)
                 btn = Button(text=option, size_hint_y=None, height=44)
                 btn.bind(on_release=lambda btn, d=dropdown: d.select(btn.text))
                 dropdown.add_widget(btn)
@@ -90,8 +93,8 @@ class DetailMenu(Screen):
             dropdown.bind(on_select=lambda instance, x, m=mainbutton: setattr(m, 'text', x))
             dropdown.dismiss()
         
-        self.mainbutton_arch.text = DEFAULT_ARCH
-        self.mainbutton_version.text = str(DEFAULT_VERSION)
+        self.mainbutton_arch.text = DEFAULT_ARCH if DEFAULT_ARCH in choices['arch'] else choices['arch'][0]
+        self.mainbutton_version.text = str(DEFAULT_VERSION) if str(DEFAULT_VERSION) in choices['version'] else choices['version'][0]
         
     def switch_disabled(self, disabled):
         self.flash_button.disabled = disabled
@@ -115,6 +118,7 @@ class DetailMenu(Screen):
         
         filename = image['link'].split('/')[-1]
         filepath = os.path.join("iso", filename)
+        app.done_writing = False
         self.flash_thread = FlashThread(filepath, app.disks[0].fs_path)
         self.flash_thread.start()
         self.status_label.text = "Flashing..."
@@ -124,12 +128,17 @@ class DetailMenu(Screen):
     def update_progress(self, dt):
         ft = self.flash_thread
         self.progress.value = ft.value / ft.max
-        self.progress_label.text = "{}/{}MiB ".format(ft.value / (1024**2), ft.max / (1024**2))
+        self.progress_label.text = "{}/{}MiB ".format(round(ft.value / (1024**2)), round(ft.max / (1024**2)))
         
         if int(self.progress.value) == 1:
-            self.status_label.text = "Done!"
-            self.done = True
-            self.progress_clock.cancel()
+            if not app.usb_disconnected:
+                self.status_label.text = "Almost done..."
+                app.done_writing = True
+            else:
+                self.status_label.text = "Done!"
+                self.status_label.color = (0, 1, 0, 1)
+                self.done = True
+                self.progress_clock.cancel()
     
     def touch(self):
         if self.done:
@@ -184,11 +193,13 @@ class FedoratorMenu(Screen):
         self.right_disk_text = disk_texts[1]
         
         if disks:
+            app.usb_disconnected = False
             self.error_message = False
             self.status_message = "Tap to begin"
             self.ready = True
         else:
-            if sm.current != 'front':
+            app.usb_disconnected = True
+            if sm.current != 'front' and not app.done_writing:
                 sm.transition.direction = 'right'
                 sm.current = 'front'
                 
@@ -208,6 +219,8 @@ class FedoratorApp(App):
     selected_releases = ObjectProperty()
     
     disks = ObjectProperty()
+    done_writing = BooleanProperty()
+    usb_disconnected = BooleanProperty()
     
     def build(self):
         fedorator_menu = FedoratorMenu(name="front")

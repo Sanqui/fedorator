@@ -1,9 +1,11 @@
 import os
 import sys
+import logging
 
 from sendfile import sendfile
-
 from tqdm import tqdm
+
+import usbdisks
 
 BUFFSIZE = (1024 ** 2) * 2 # 2MB
 
@@ -11,6 +13,18 @@ def filesize(filepath):
     return os.path.getsize(filepath)
 
 def write(filepath, target):
+    logging.log(logging.INFO, "Writing {} to {}.".format(filepath, target))
+    device = False
+    if target.startswith("/dev"):
+        device = True
+    
+    if device:
+        logging.log(logging.INFO, "Target is a device, will attempt to unmount.")
+        for disk in usbdisks.get_disks():
+            if disk.fs_path.startswith(target):
+                logging.log(logging.INFO, "Unmounting {}.".format(disk.fs_path))
+                os.system("umount "+disk.fs_path)
+    
     filesize = os.path.getsize(filepath)
     fin = open(filepath, 'rb')
     
@@ -23,7 +37,8 @@ def write(filepath, target):
         offset += copied
         
         yield copied
-
+    
+    os.system('udisksctl power-off -b '+target)
 
 if __name__ == "__main__":
     filepath = sys.argv[1]

@@ -1,5 +1,11 @@
 [
     {
+        "subvariant": "freedos",
+        "name": "FreeDOS",
+        "summary": "Complete, free, MS-DOS compatible operating system with no enhancements or advanced features.",
+        "icon": ""
+    },
+    {
         "subvariant": "workstation",
         "category": "product",
         "name": "Fedora Workstation",
