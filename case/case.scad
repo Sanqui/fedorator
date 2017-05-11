@@ -22,8 +22,12 @@ DISPLAY_PIN_HEIGHT = 14;
 
 RPID_HEIGHT = RPI_HEIGHT + DISPLAY_PIN_HEIGHT + DISPLAY_HEIGHT;
 
+USB_PORT_WIDTH = 15;
+USB_PORT_HEIGHT = 8;
+USB_PORT_LENGTH = 10;
+
 SHELL_HEIGHT = 220;
-SHELL_WIDTH = 100;
+SHELL_WIDTH = 80;
 SHELL_THICKNESS = 5;
 
 BACK_SUPPORT_LENGTH = SHELL_WIDTH/8;
@@ -32,6 +36,9 @@ CABLE_HOLE_WIDTH = 20;
 RPI_POSITIONING = [SHELL_WIDTH / 2 - (RPI_WIDTH_FULL)/2,
                        0,
                        SHELL_HEIGHT/2 - RPI_LENGTH_FULL/10];
+
+NUM_USB_PORTS = 2;
+USB_PORT_Z = RPI_POSITIONING[2] / 2;
 
 PRISM_SUPPORT_HEIGHT = RPI_POSITIONING[2]/4;
 
@@ -94,13 +101,19 @@ module shell() {
         
         color("red")
         union() {
+            // hole for display
             translate([0, -RPID_HEIGHT, 0])
             translate(RPI_POSITIONING)
             translate([RPI_LEFT_PORTS_WIDTH, 0, 0])
                 cube([RPI_WIDTH+TOLERANCE, RPID_HEIGHT*2, RPI_LENGTH+TOLERANCE]);
             
+            // hole for power cable in the back
             translate([SHELL_WIDTH*0.1, SHELL_WIDTH, SHELL_THICKNESS])
                 cube([CABLE_HOLE_WIDTH, CABLE_HOLE_WIDTH, CABLE_HOLE_WIDTH]);
+    
+            // holes for usb ports
+            translate([SHELL_WIDTH/2 - USB_PORT_WIDTH/2, -USB_PORT_LENGTH, USB_PORT_Z])
+                color("blue") cube([USB_PORT_WIDTH, USB_PORT_LENGTH*2, USB_PORT_HEIGHT]);
         }
     }
 }
@@ -117,7 +130,7 @@ module support_prism(l, w) {
 }
 
 module back_support_prism(offset) {
-    translate([offset, BACK_SUPPORT_LENGTH + RPID_HEIGHT, RPI_POSITIONING[2]])
+    translate([offset, BACK_SUPPORT_LENGTH + RPID_HEIGHT, 0])
         prism((SHELL_WIDTH - RPI_WIDTH_FULL)/2, -BACK_SUPPORT_LENGTH, -PRISM_SUPPORT_HEIGHT );
 }
 
@@ -166,6 +179,8 @@ module shell_cap() {
 supports();
 shell();
 shell_cap();
+
+
 translate([0, RPID_HEIGHT, 0])
 translate(RPI_POSITIONING)
     rpid();
