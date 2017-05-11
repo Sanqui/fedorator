@@ -1,3 +1,4 @@
+HIDE_SHELL = true;
 
 TOLERANCE = 0.5;
 
@@ -25,6 +26,11 @@ RPID_HEIGHT = RPI_HEIGHT + DISPLAY_PIN_HEIGHT + DISPLAY_HEIGHT;
 USB_PORT_WIDTH = 15;
 USB_PORT_HEIGHT = 8;
 USB_PORT_LENGTH = 10;
+USB_PORT_BOTTOM_EXTRA = 2;
+USB_PORT_SIDE_EXTRA = 1;
+USB_PORT_CONNECTOR_LENGTH = 40;
+
+USB_CABLE_DIAMETER = 5;
 
 SHELL_HEIGHT = 220;
 SHELL_WIDTH = 80;
@@ -32,6 +38,8 @@ SHELL_THICKNESS = 5;
 
 BACK_SUPPORT_LENGTH = SHELL_WIDTH/8;
 CABLE_HOLE_WIDTH = 20;
+USB_PORT_SUPPORT_CABLE_LENGTH = (SHELL_WIDTH - USB_PORT_CONNECTOR_LENGTH) / 2;
+USB_PORT_SUPPORT_PILLAR_SIZE = USB_PORT_LENGTH;
 
 RPI_POSITIONING = [SHELL_WIDTH / 2 - (RPI_WIDTH_FULL)/2,
                        0,
@@ -70,7 +78,8 @@ module rounded_rect(size, radius) {
     hull() {
         for (xp = [0, 1]) {
             for (yp = [0, 1]) {
-                translate([(xp*x)+(radius/2), (yp*y)+(radius/2), 0])
+                translate([(xp*x)+(xp-0.5)*-2*(radius/2),
+                           (yp*y)+(yp-0.5)*-2*(radius/2), 0])
                     circle(r=radius);
             }
         }
@@ -95,8 +104,8 @@ module rounded_cube(size, radius, thickness) {
 module shell() {
     difference() {
         union() {
-            rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_THICKNESS], 5, -1);
-            //rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_HEIGHT], 5, SHELL_THICKNESS);
+            rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_THICKNESS], SHELL_THICKNESS, -1);
+            if (!HIDE_SHELL) rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_HEIGHT], SHELL_THICKNESS, SHELL_THICKNESS);
         }
         
         color("red")
@@ -146,6 +155,29 @@ module back_support(height) {
     }
 }
 
+module usb_port_support_pillar() {
+    cube([USB_PORT_WIDTH + USB_PORT_SIDE_EXTRA*2, USB_PORT_SUPPORT_PILLAR_SIZE, USB_PORT_Z - USB_PORT_HEIGHT - USB_PORT_BOTTOM_EXTRA]);
+}
+
+module usb_cable(length) {
+    cylinder(h=length, r=USB_CABLE_DIAMETER/2)
+}
+
+module usb_port_support() {
+    translate([0, 0, USB_PORT_Z - USB_PORT_HEIGHT - USB_PORT_BOTTOM_EXTRA]) {
+        cube([USB_PORT_WIDTH + USB_PORT_SIDE_EXTRA*2, USB_PORT_CONNECTOR_LENGTH + 4, USB_PORT_HEIGHT]);
+        
+        translate([0, USB_PORT_CONNECTOR_LENGTH + 4, 0])
+            cube([USB_PORT_WIDTH + USB_PORT_SIDE_EXTRA*2,
+                USB_PORT_SUPPORT_CABLE_LENGTH, USB_PORT_HEIGHT + USB_CABLE_DIAMETER]);
+    }
+    
+    translate([0, 0, 0])
+        usb_port_support_pillar();
+    translate([0, USB_PORT_CONNECTOR_LENGTH + 4 + USB_PORT_SUPPORT_CABLE_LENGTH - USB_PORT_SUPPORT_PILLAR_SIZE, 0])
+        usb_port_support_pillar();
+}
+
 module supports() {
     translate([0, 0, 0])
         support_pillar();
@@ -161,9 +193,12 @@ module supports() {
     translate([RPI_POSITIONING[0], 0, RPI_POSITIONING[2] - RPI_LENGTH_ETHERNET])
         support_prism(ethernet_prism_width + RPI_WIDTH_USB + TOLERANCE*2, RPID_HEIGHT - RPI_HEIGHT_ETHERNET);
     
-    // usb support prism
+    // usb support prism (dropped in favor of a single prism)
     /*translate([RPI_POSITIONING[0] + ethernet_prism_width, 0, RPI_POSITIONING[2] - RPI_LENGTH_ETHERNET])
         support_prism(RPI_WIDTH_USB + TOLERANCE*2, RPID_HEIGHT - RPI_HEIGHT_USB1);*/
+    
+    translate([SHELL_WIDTH/2 - USB_PORT_WIDTH/2, 0, 0])
+        usb_port_support();
 }
 
 module shell_cap() {
