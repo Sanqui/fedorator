@@ -1,4 +1,5 @@
 HIDE_SHELL = false;
+SPLIT_SHELL = true;
 $fn=80;
 
 TOLERANCE = 0.5;
@@ -22,6 +23,10 @@ RPI_LENGTH_USB = 2;
 DISPLAY_HEIGHT = 5;
 DISPLAY_PIN_HEIGHT = 14;
 
+DISPLAY_MARGIN_BOTTOM = 2.0;
+DISPLAY_MARGIN_SIDE = 2.0;
+DISPLAY_MARGIN_TOP = 6;
+
 RPID_HEIGHT = RPI_HEIGHT + DISPLAY_PIN_HEIGHT + DISPLAY_HEIGHT;
 
 USB_PORT_WIDTH = 15;
@@ -43,7 +48,7 @@ USB_PORT_SUPPORT_CABLE_LENGTH = (SHELL_WIDTH - USB_PORT_CONNECTOR_LENGTH) / 2;
 USB_PORT_SUPPORT_PILLAR_SIZE = USB_PORT_LENGTH;
 
 RPI_POSITIONING = [SHELL_WIDTH / 2 - (RPI_WIDTH_FULL)/2,
-                       0,
+                       SHELL_THICKNESS,
                        SHELL_HEIGHT/2 - RPI_LENGTH_FULL/10];
 
 NUM_USB_PORTS = 2;
@@ -103,27 +108,32 @@ module rounded_cube(size, radius, thickness) {
 }
 
 module shell() {
-    difference() {
-        union() {
-            if (!HIDE_SHELL) rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_HEIGHT], SHELL_THICKNESS, SHELL_THICKNESS);
-        }
-        
-        color("red")
-        union() {
-            // hole for display
-            translate([0, -RPID_HEIGHT, 0])
-            translate(RPI_POSITIONING)
-            translate([RPI_LEFT_PORTS_WIDTH, 0, 0])
-                cube([RPI_WIDTH+TOLERANCE, RPID_HEIGHT*2, RPI_LENGTH+TOLERANCE]);
+    if (!HIDE_SHELL) {
+        difference() {
+            union() {
+                rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_HEIGHT], SHELL_THICKNESS, SHELL_THICKNESS);
+            }
             
-            // hole for power cable in the back
-            translate([SHELL_WIDTH*0.1, SHELL_WIDTH, SHELL_THICKNESS])
-                cube([CABLE_HOLE_WIDTH, CABLE_HOLE_WIDTH, CABLE_HOLE_WIDTH]);
-    
-            // holes for usb ports
-            for (i = [1, NUM_USB_PORTS]) {
-                translate([i*SHELL_WIDTH/(NUM_USB_PORTS+1) - USB_PORT_WIDTH/2, -USB_PORT_LENGTH, USB_PORT_Z])
-                    color("blue") cube([USB_PORT_WIDTH, USB_PORT_LENGTH*2, USB_PORT_HEIGHT]);
+            color("red")
+            union() {
+                // hole for display
+                translate([0, -RPID_HEIGHT, 0])
+                translate(RPI_POSITIONING)
+                translate([DISPLAY_MARGIN_SIDE, 0, DISPLAY_MARGIN_BOTTOM])
+                translate([RPI_LEFT_PORTS_WIDTH, 0, 0])
+                    cube([RPI_WIDTH+TOLERANCE - DISPLAY_MARGIN_SIDE,
+                          RPID_HEIGHT*2,
+                          RPI_LENGTH+TOLERANCE - DISPLAY_MARGIN_TOP]);
+                
+                // hole for power cable in the back
+                translate([SHELL_WIDTH*0.1, SHELL_WIDTH, SHELL_THICKNESS])
+                    cube([CABLE_HOLE_WIDTH, CABLE_HOLE_WIDTH, CABLE_HOLE_WIDTH]);
+        
+                // holes for usb ports
+                for (i = [1, NUM_USB_PORTS]) {
+                    translate([i*SHELL_WIDTH/(NUM_USB_PORTS+1) - USB_PORT_WIDTH/2, -USB_PORT_LENGTH, USB_PORT_Z])
+                        color("blue") cube([USB_PORT_WIDTH, USB_PORT_LENGTH*2, USB_PORT_HEIGHT]);
+                }
             }
         }
     }
@@ -131,7 +141,7 @@ module shell() {
 
 module support_pillar() {
     cube([(SHELL_WIDTH - RPI_WIDTH_FULL)/2,
-          RPID_HEIGHT,
+          RPI_POSITIONING[1] + RPID_HEIGHT,
           RPI_POSITIONING[2] + RPI_LENGTH/2]);
 }
 
@@ -141,7 +151,7 @@ module support_prism(l, w) {
 }
 
 module back_support_prism(offset) {
-    translate([offset, BACK_SUPPORT_LENGTH + RPID_HEIGHT, 0])
+    translate([offset, RPI_POSITIONING[1] + BACK_SUPPORT_LENGTH + RPID_HEIGHT, 0])
         prism((SHELL_WIDTH - RPI_WIDTH_FULL)/2, -BACK_SUPPORT_LENGTH, -PRISM_SUPPORT_HEIGHT );
 }
 
@@ -153,7 +163,7 @@ module back_support(height) {
               BACK_SUPPORT_LENGTH]);
 
         back_support_prism(0);
-        back_support_prism(RPI_POSITIONING[0] + RPI_WIDTH_FULL + TOLERANCE);
+        back_support_prism(RPI_POSITIONING[0] + RPI_WIDTH_FULL );
     }
 }
 
@@ -193,7 +203,7 @@ module supports() {
     rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_THICKNESS], SHELL_THICKNESS, -1);
     translate([0, 0, 0])
         support_pillar();
-    translate([RPI_POSITIONING[0] + RPI_WIDTH_FULL + TOLERANCE, 0, 0])
+    translate([RPI_POSITIONING[0] + RPI_WIDTH_FULL , 0, 0])
         support_pillar();
     
     // back support
@@ -232,18 +242,35 @@ module shell_cap() {
     }
 }
 
-difference(){
-    supports();
-    shell();
-}
+module main() {
+    if (SPLIT_SHELL) {
+        difference(){
+            supports();
+            shell();
+        }
 
-translate([100, 0, 0]) {
-    difference(){
-        shell();
+        translate([100, 0, 0]) {
+            difference(){
+                shell();
+                supports();
+            }
+        }
+    } else {
         supports();
+        shell();
     }
 }
 //shell_cap();
+
+difference(){
+    main();
+    /*color("red") translate([-5, -5, 0]) cube([200, 100, 95]);
+    color("red") translate([-5, -5, 120]) cube([100, 100, 100]);
+    color("red") translate([90, 1, 105]) cube([100, 100, 200]);
+    color("red") translate([90, -5, 190]) cube([100, 100, 200]);
+    */
+}
+
 
 
 translate([0, RPID_HEIGHT, 0])
