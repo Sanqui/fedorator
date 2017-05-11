@@ -1,5 +1,6 @@
 HIDE_SHELL = false;
 SPLIT_SHELL = true;
+SPLIT_SHELL_UPSIDE_DOWN = true;
 $fn=80;
 
 TOLERANCE = 0.5;
@@ -38,7 +39,7 @@ USB_PORT_CONNECTOR_LENGTH = 40;
 
 USB_CABLE_DIAMETER = 5;
 
-SHELL_HEIGHT = 220;
+SHELL_HEIGHT = 157;
 SHELL_WIDTH = 80;
 SHELL_THICKNESS = 5;
 
@@ -49,7 +50,7 @@ USB_PORT_SUPPORT_PILLAR_SIZE = USB_PORT_LENGTH;
 
 RPI_POSITIONING = [SHELL_WIDTH / 2 - (RPI_WIDTH_FULL)/2,
                        SHELL_THICKNESS,
-                       SHELL_HEIGHT/2 - RPI_LENGTH_FULL/10];
+                       SHELL_HEIGHT/2 - RPI_LENGTH_FULL/5];
 
 NUM_USB_PORTS = 2;
 USB_PORT_Z = RPI_POSITIONING[2] / 2;
@@ -111,7 +112,12 @@ module shell() {
     if (!HIDE_SHELL) {
         difference() {
             union() {
+                // shell
                 rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_HEIGHT], SHELL_THICKNESS, SHELL_THICKNESS);
+                
+                // cap
+                translate([0, 0, SHELL_HEIGHT - SHELL_THICKNESS])
+                    rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_THICKNESS], SHELL_THICKNESS, -1);
             }
             
             color("red")
@@ -126,7 +132,7 @@ module shell() {
                           RPI_LENGTH+TOLERANCE - DISPLAY_MARGIN_TOP]);
                 
                 // hole for power cable in the back
-                translate([SHELL_WIDTH*0.1, SHELL_WIDTH, SHELL_THICKNESS])
+                translate([SHELL_WIDTH*0.1, SHELL_WIDTH, SHELL_THICKNESS*4])
                     cube([CABLE_HOLE_WIDTH, CABLE_HOLE_WIDTH, CABLE_HOLE_WIDTH]);
         
                 // holes for usb ports
@@ -200,7 +206,10 @@ module usb_port_support() {
 }
 
 module supports() {
+    // floor
     rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_THICKNESS], SHELL_THICKNESS, -1);
+    
+    // raised border to hold the shell in
     translate([SHELL_THICKNESS, SHELL_THICKNESS, 0])
     rounded_cube([SHELL_WIDTH-SHELL_THICKNESS*2, SHELL_WIDTH-SHELL_THICKNESS*2, SHELL_THICKNESS*4], SHELL_THICKNESS*2, 4);
     translate([0, 0, 0])
@@ -234,7 +243,7 @@ module supports() {
     
 }
 
-module shell_cap() {
+/*module shell_cap() {
     translate([SHELL_WIDTH + SHELL_THICKNESS*4, 0, 0]) {
         rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_THICKNESS], 5, -1);
         translate([SHELL_THICKNESS/2, SHELL_THICKNESS/2, 0])
@@ -242,20 +251,32 @@ module shell_cap() {
                       SHELL_WIDTH-SHELL_THICKNESS,
                       SHELL_THICKNESS*2], 5, -1);
     }
+}*/
+
+module split_bottom(){
+    difference(){
+        supports();
+        shell();
+    }
+}
+
+module split_top(){
+    difference(){
+        shell();
+        supports();
+    }
 }
 
 module main() {
     if (SPLIT_SHELL) {
-        difference(){
-            supports();
-            shell();
-        }
-
-        translate([100, 0, 0]) {
-            difference(){
-                shell();
-                supports();
-            }
+        split_bottom();
+        
+        if (SPLIT_SHELL_UPSIDE_DOWN) {
+            translate([SHELL_WIDTH * 2.2, 0, SHELL_HEIGHT])    
+            rotate([0, 180, 0]) split_top();
+        } else {
+            translate([SHELL_WIDTH * 1.2, 0, 0])
+            rotate([0, 0, 0]) split_top();
         }
     } else {
         supports();
