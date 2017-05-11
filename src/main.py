@@ -89,7 +89,7 @@ class DetailMenu(Screen):
             choices[parameter] = []
             for option in options:
                 choices[parameter].append(option)
-                btn = Button(text=option, size_hint_y=None, height=44)
+                btn = Button(text=option, size_hint_y=None, height=48, background_color=(0x3c/255, 0x6e/255, 0xb4/255, 1))
                 btn.bind(on_release=lambda btn, d=dropdown: d.select(btn.text))
                 dropdown.add_widget(btn)
             

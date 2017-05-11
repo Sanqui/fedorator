@@ -30,7 +30,7 @@
         size_hint: (1.0, 1.0)
         pos: (0, 0)
         
-        background_color: (1, 1, 1, 0.5)
+        background_color: (0x3c/255, 0x6e/255, 0xb4/255, 1)
         
         on_press:
             root.on_press()
@@ -105,12 +105,14 @@
             
             Button:
                 id: mainbutton_version
+                background_color: (0x3c/255, 0x6e/255, 0xb4/255, 1)
             
             Label:
                 text: "Architecture"
                 
             Button:
                 id: mainbutton_arch
+                background_color: (0x3c/255, 0x6e/255, 0xb4/255, 1)
         
         Button:
             id: flash_button
@@ -118,6 +120,7 @@
             pos_hint: {'x': 0.025, 'y': 0.025}
             text: "Flash"
             on_press: root.flash()
+            background_color: (0x3c/255, 0x6e/255, 0xb4/255, 1)
         
         Label:
             id: status_label
@@ -151,6 +154,12 @@
     release_grid: release_grid
     
     FloatLayout:
+        canvas.before:
+            Color:
+                rgba: 0, 0, 0, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
         size_hint: 1, 1
         
         BackLabel:
