@@ -201,6 +201,8 @@ module usb_port_support() {
 
 module supports() {
     rounded_cube([SHELL_WIDTH, SHELL_WIDTH, SHELL_THICKNESS], SHELL_THICKNESS, -1);
+    translate([SHELL_THICKNESS, SHELL_THICKNESS, 0])
+    rounded_cube([SHELL_WIDTH-SHELL_THICKNESS*2, SHELL_WIDTH-SHELL_THICKNESS*2, SHELL_THICKNESS*4], SHELL_THICKNESS*2, 4);
     translate([0, 0, 0])
         support_pillar();
     translate([RPI_POSITIONING[0] + RPI_WIDTH_FULL , 0, 0])
