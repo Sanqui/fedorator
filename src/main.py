@@ -119,7 +119,11 @@ class DetailMenu(Screen):
               and 'netinst' not in i['link']:
                 image = i
         
-        assert image
+        if not image:
+            self.status_label.text = "Invalid version and arch combintaion"
+            self.status_label.color = (1, 0, 0, 1)
+            return
+        
         filename = image['link'].split('/')[-1]
         filepath = os.path.join("iso", filename)
         if not os.path.isfile(filepath):
@@ -142,6 +146,7 @@ class DetailMenu(Screen):
         if ft.ex:
             self.status_label.color = (1, 0, 0, 1)
             self.status_label.text = "Error: {}".format(type(ft.ex))
+            self.switch_disabled(False)
             return
         self.progress.value = ft.value / ft.max
         self.progress_label.text = "{}/{}MiB ".format(round(ft.value / (1024**2)), round(ft.max / (1024**2)))
