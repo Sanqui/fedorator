@@ -127,7 +127,7 @@ class DetailMenu(Screen):
                 image = i
         
         if not image:
-            self.error_label.text = "Invalid version and arch combintaion"
+            self.error_label.text = "Unavailable version and arch combination."
             self.error_label.color = (1, 0, 0, 1)
             self.status_label.text = ""
             return
@@ -135,7 +135,7 @@ class DetailMenu(Screen):
         filename = image['link'].split('/')[-1]
         filepath = os.path.join("iso", filename)
         if not os.path.isfile(filepath):
-            self.error_label.text = "Image not present!"
+            self.error_label.text = "Sadly, this image is not present."
             self.error_label.color = (1, 0, 0, 1)
             self.status_label.text = ""
             return
