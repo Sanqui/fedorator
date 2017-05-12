@@ -23,6 +23,7 @@ import write
 from releases import *
 
 DEBUG = False
+INCLUDE_FREEDOS = False
 
 sm = ScreenManager()
 
@@ -71,6 +72,7 @@ class DetailMenu(Screen):
         self.done = False
         self.switch_disabled(False)
         self.progress.value = 0
+        self.status_label.color = (1, 1, 1, 1)
         self.status_label.text = ""
         self.progress_label.text = ""
         
@@ -170,6 +172,8 @@ class ListMenu(Screen):
     def build(self):
         self.release_grid.bind(minimum_height=self.release_grid.setter('height'))
         for metadata in releases:
+            if metadata['subvariant'] == 'freedos' and not INCLUDE_FREEDOS:
+                continue
             btn = ReleaseButton()
             btn.text = metadata['name']
             logo_tips = ("{}-logo_color.png", "{}_icon_grey_pattern.png", "media-optical-symbolic.png")
@@ -200,6 +204,9 @@ class FedoratorMenu(Screen):
             #self.status_message="Touched"
             self.manager.transition.direction = 'left'
             self.manager.current = 'list'
+            
+    def discard_error(self, dt):
+        self.error_message = False
     
     def update_disks(self, dt):
         disks = usbdisks.get_usb_disks(dummy=DEBUG)
@@ -207,7 +214,10 @@ class FedoratorMenu(Screen):
         disk_texts = ["", ""]
         for disk in disks[0:2]:
             disk_gib = disk.size.bytes/(1024**3) if disk.size else "???"
-            text = "{}: {:.3} GiB".format(disk.dev_name, disk_gib)
+            warn = False
+            if disk.size and disk_gib < 1.5:
+                warn = True
+            text = "{:.3} GiB{}".format(disk_gib, " (!)" if warn else "")
             disk_texts.insert(0, text)
 
         self.left_disk_text = disk_texts[0]
@@ -226,9 +236,10 @@ class FedoratorMenu(Screen):
                 
                 self.error_message = True
                 self.status_message = "USB removed!"
+                Clock.schedule_once(self.discard_error, 7.5)
             
             if not self.error_message:
-                self.status_message = "Please insert flash"
+                self.status_message = "Please insert a flash drive"
             self.ready = False
     
     def update_ip(self, dt):

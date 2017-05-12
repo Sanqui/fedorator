@@ -9,6 +9,7 @@
     pos_hint: {'x': -0.04, 'y': 0.82}
     color: (1, 1, 1, 1)
     text: "<- back"
+    color: (1, 1, 1, 0.5)
 
 <ImageButton@Button>:
     source: None
@@ -120,7 +121,7 @@
             pos_hint: {'x': 0.025, 'y': 0.025}
             text: "Flash"
             on_press: root.flash()
-            background_color: (0x3c/255, 0x6e/255, 0xb4/255, 1)
+            background_color: (104/255, 159/255, 237/255, 1)
         
         Label:
             id: status_label
@@ -213,6 +214,8 @@
             center_x: root.width / 2
             top: root.top - 52
             text: root.status_message
+            halign: 'center'
+            
         
         Label:
             font_size: 16
@@ -233,7 +236,7 @@
         Label:
             font_size: 16
             text_size: 128, 64
-            pos: root.width/2, root.height - 38
+            pos: root.width/1.75, root.height - 38
             halign: 'right'
             valign: 'bottom'
             text: root.ip
