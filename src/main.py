@@ -252,7 +252,7 @@ class FedoratorMenu(Screen):
                 sm.current = 'front'
                 
                 self.error_message = True
-                self.status_message = "USB removed!"
+                self.status_message = "Flash drive removed!"
                 Clock.schedule_once(self.discard_error, 7.5)
             
             if not self.error_message:
@@ -280,6 +280,8 @@ class FedoratorApp(App):
         detail_menu = DetailMenu(name="detail")
         detail_menu.build()
         sm.add_widget(detail_menu)
+        
+        app.done_writing = False
         
         if DEBUG:
             sm.current = 'list'
