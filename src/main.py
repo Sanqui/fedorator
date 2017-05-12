@@ -17,6 +17,7 @@ from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.factory import Factory
 from kivy.lang import Builder
+from kivy.animation import Animation
 
 import usbdisks
 import write
@@ -73,8 +74,11 @@ class DetailMenu(Screen):
         self.switch_disabled(False)
         self.progress.value = 0
         self.status_label.color = (1, 1, 1, 1)
+        self.status_label.pos_hint = {'x': 0.025, 'y': 0.025}
         self.status_label.text = ""
         self.progress_label.text = ""
+        self.status_small_label.text = ""
+        self.error_label.text = ""
         
         release = app.selected_release
         self.release_name = release['name']
@@ -108,6 +112,7 @@ class DetailMenu(Screen):
         self.mainbutton_version.disabled = disabled
         self.mainbutton_arch.disabled = disabled
         self.back_label.color = (0, 0, 0, 0) if disabled else (1, 1, 1, 1)
+        self.flash_button.text = "" if disabled else "Flash"
         
     
     def flash(self):
@@ -122,15 +127,17 @@ class DetailMenu(Screen):
                 image = i
         
         if not image:
-            self.status_label.text = "Invalid version and arch combintaion"
-            self.status_label.color = (1, 0, 0, 1)
+            self.error_label.text = "Invalid version and arch combintaion"
+            self.error_label.color = (1, 0, 0, 1)
+            self.status_label.text = ""
             return
         
         filename = image['link'].split('/')[-1]
         filepath = os.path.join("iso", filename)
         if not os.path.isfile(filepath):
-            self.status_label.text = "Image not present!"
-            self.status_label.color = (1, 0, 0, 1)
+            self.error_label.text = "Image not present!"
+            self.error_label.color = (1, 0, 0, 1)
+            self.status_label.text = ""
             return
         
         self.switch_disabled(True)
@@ -146,20 +153,30 @@ class DetailMenu(Screen):
     def update_progress(self, dt):
         ft = self.flash_thread
         if ft.ex:
-            self.status_label.color = (1, 0, 0, 1)
-            self.status_label.text = "Error: {}".format(type(ft.ex))
+            self.error_label.color = (1, 0, 0, 1)
+            self.error_label.text = "Error: {}".format(type(ft.ex))
+            self.status_label.text = ""
             self.switch_disabled(False)
+            self.progress_clock.cancel()
             return
         self.progress.value = ft.value / ft.max
         self.progress_label.text = "{}/{}MiB ".format(round(ft.value / (1024**2)), round(ft.max / (1024**2)))
         
         if int(self.progress.value) == 1:
-            if not app.usb_disconnected:
+            if not app.usb_disconnected and self.flash_thread.destination != "dummy":
                 self.status_label.text = "Almost done..."
                 app.done_writing = True
             else:
+                self.status_label.pos_hint = {'x': 0.025, 'y': 0.060}
                 self.status_label.text = "Done!"
-                self.status_label.color = (0, 1, 0, 1)
+                #self.status_label.color = (0, 1, 0, 1)
+                anim = Animation(color=(0, 1, 0, 1))
+                anim += Animation(duration=2.)
+                anim += Animation(color=(1, 1, 1, 1))
+                anim += Animation(duration=1.)
+                anim.repeat = True
+                anim.start(self.status_label)
+                self.status_small_label.text = "You may now safely\nremove the flash disk."
                 self.done = True
                 self.progress_clock.cancel()
     

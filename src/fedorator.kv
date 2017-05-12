@@ -6,10 +6,9 @@
     text_size: 64, 32
     halign: "left"
     valign: "top"
-    pos_hint: {'x': -0.04, 'y': 0.82}
-    color: (1, 1, 1, 1)
+    pos_hint: {'x': -0.02, 'y': 0.81}
     text: "<- back"
-    color: (1, 1, 1, 0.5)
+#    color: (1, 1, 1, 0.5)
 
 <ImageButton@Button>:
     source: None
@@ -57,7 +56,9 @@
     flash_button: flash_button
     back_button: back_button
     back_label: back_label
+    error_label: error_label
     status_label: status_label
+    status_small_label: status_small_label
     progress_label: progress_label
     progress: progress
     
@@ -119,16 +120,46 @@
             id: flash_button
             size_hint: 0.95, 0.2
             pos_hint: {'x': 0.025, 'y': 0.025}
-            text: "Flash"
+            text: ""
             on_press: root.flash()
             background_color: (104/255, 159/255, 237/255, 1)
+            font_size: 32
         
         Label:
-            id: status_label
-            pos_hint: {'x': 0, 'y': -0.2}
+            id: error_label
+#            pos_hint: {'x': 0, 'y': -0.2}
             text_size: self.size
             halign: 'center'
             valign: 'middle'
+            bcolor: (0, 0, 0, 1)
+            
+            size_hint: 0.95, 0.2
+            pos_hint: {'x': 0.025, 'y': 0.200}
+        
+        
+        Label:
+            id: status_label
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+            bcolor: (0, 0, 0, 1)
+            
+            size_hint: 0.95, 0.2
+            pos_hint: {'x': 0.025, 'y': 0.055}
+            font_size: 30
+        
+        Label:
+            id: status_small_label
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+            bcolor: (0, 0, 0, 1)
+            
+            text: ""
+            
+            size_hint: 0.95, 0.15
+            pos_hint: {'x': 0.025, 'y': 0.0}
+            font_size: 16
         
         Label:
             id: progress_label

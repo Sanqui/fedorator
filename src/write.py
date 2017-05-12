@@ -38,7 +38,8 @@ def write(filepath, target):
         
         yield copied
     
-    os.system('udisksctl power-off -b '+target)
+    if device:
+        os.system('udisksctl power-off -b '+target)
 
 if __name__ == "__main__":
     filepath = sys.argv[1]
