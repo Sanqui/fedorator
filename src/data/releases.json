@@ -1,7 +1,7 @@
 [
     {
         "arch": "i386",
-        "link": "www.freedos.org/freedos/files/download/fd11src.iso",
+        "link": "http://www.freedos.org/freedos/files/download/fd11src.iso",
         "releaseDate": "",
         "sha256": "10190ff0d38f0d523f748504d5165fa5437492f42887ed8e3cfdad32781147b7",
         "size": "40828928",

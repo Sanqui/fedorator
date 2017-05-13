@@ -3,6 +3,7 @@ import json
 import os
 from os import listdir
 import os.path as path
+from sys import argv
 
 from tqdm import tqdm
 import requests
@@ -10,6 +11,8 @@ import requests
 VERSION = 25
 ARCH_PRIORITY = ["x86_64", "i386"]
 SUBVARIANT_PRIORITY = ["workstation", "server", "kde", "xfce", "lxde"]
+
+MAX_IMAGES = int(argv[1]) if len(argv) >= 2 else 10
 
 DEFAULT_ARCH = ARCH_PRIORITY[0]
 DEFAULT_VERSION = VERSION
@@ -40,8 +43,6 @@ def download(url):
 images = json.load(open("data/releases.json"))
 releases = json.load(open("data/metadata.json"))
 
-MAX_IMAGES = 10
-
 for release in releases:
     release['images'] = []
     for image in images:
@@ -64,6 +65,9 @@ for subvariant in SUBVARIANT_PRIORITY:
               and image['link'].split('/')[-1] not in downloaded_images:
                 images_by_priority.append(image)
 
+for image in images:
+    if not image in images_by_priority:
+        images_by_priority.append(image)
 
 if __name__ == '__main__':
     num = min(MAX_IMAGES - len(downloaded_images), len(images_by_priority))
@@ -73,5 +77,7 @@ if __name__ == '__main__':
         for image in tqdm(images_by_priority[:10]):
             tqdm.write("Downloading {}...".format(image['link']))
             download(image['link'])
+    else:
+        print("{} images present, nothing to do.".format(len(downloaded_images)))
         
-        
+        print(num)
