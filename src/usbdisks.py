@@ -39,6 +39,10 @@ def get_disk_sizes():
 def get_disks(dummy=False):
     disk_sizes = get_disk_sizes()
     disks = []
+    
+    if not os.path.isdir(PATH):
+        return []
+    
     for name in os.listdir(PATH):
         parts = name.split("-", 3)
         if len(parts) == 4:
