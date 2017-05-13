@@ -38,17 +38,21 @@ Log in and follow these instructions to set up the Fedorator software.
      $ sudo dnf install git python3-virtualenv redhat-rpm-config mesa-libGL-devel
      
      $  # On Raspbian
-     $ sudo apt-get install
+     $ sudo apt-get install git python3-virtualenv cython3 libsdl1.2-dev
+     $  # if testing with a DE
+     $ sudo apt-get build-dep python3-pygame
      
      $  # Clone this repository into the home directory
      $ git clone https://github.com/Sanqui/fedorator
      $ cd fedorator/src
      
      $  # Set up the virtualenv
-     $ python3 -m virtualenv env
+     $ python3 -m virtualenv --python=python3 env
      $ source env/bin/activate
      $ pip install cython
      $ pip install -r requirements.txt
+     $ # if testing with a DE
+     $ pip install pygame
 
 To run the software now, simply do
 
