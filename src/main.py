@@ -41,6 +41,9 @@ class ConfirmPopup(GridLayout):
         pass
 
 class FlashThread(threading.Thread):
+    """
+        This thread runs the task of copying the image to a flash drive.
+    """
     def __init__(self, source, destination, **kvargs):
         super().__init__(**kvargs)
         self.source = source
@@ -59,6 +62,7 @@ class FlashThread(threading.Thread):
 
 
 class ReleaseButton(RelativeLayout):
+    """ A button in the scrollable release list. """
     text = StringProperty()
     source = StringProperty()
     release = ObjectProperty()
@@ -70,6 +74,13 @@ class ReleaseButton(RelativeLayout):
         sm.current = 'detail'
 
 class DetailMenu(Screen):
+    """
+        The menu showing details on a single release.
+        
+        It contains the logo, name, and short description.  It allows the user
+        to change version and release.  Finally, it has a large "Flash" button
+        which begins the flashing process.
+    """
     release_name = StringProperty()
     release_image = StringProperty()
     release_summary = StringProperty()
@@ -213,6 +224,7 @@ class DetailMenu(Screen):
             sm.current = 'front'
 
 class ListMenu(Screen):
+    """ The menu showing the list of releases available. """
     def build(self):
         self.release_grid.bind(minimum_height=self.release_grid.setter('height'))
         for metadata in releases:
@@ -233,6 +245,12 @@ class ListMenu(Screen):
         
 
 class FedoratorMenu(Screen):
+    """ 
+        The front (or standby) screen.
+        
+        Besides a large image of the Fedora logo, it contains basic state
+        information.
+    """
     left_disk_text = StringProperty()
     right_disk_text = StringProperty()
     
@@ -291,6 +309,7 @@ class FedoratorMenu(Screen):
     
 
 class FedoratorApp(App):
+    """ The Kivy app running the Fedorator. """
     selected_release = ObjectProperty()
     selected_releases = ObjectProperty()
     

@@ -21,6 +21,7 @@ DOWNLOAD_DIRECTORY = "iso"
 BUFFSIZE = (1024 ** 2) * 4 # 4MB
 
 def download(url):
+    """ Download a file while reporting progress. """
     filename = url.split('/')[-1]
     filepath = path.join(DOWNLOAD_DIRECTORY, filename)
     try:

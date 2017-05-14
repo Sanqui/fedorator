@@ -13,6 +13,11 @@ def filesize(filepath):
     return os.path.getsize(filepath)
 
 def write(filepath, target):
+    """
+        Copy a large file while reporting progress.
+        
+        This function uses sendfile() to achieve fast copying of data.
+    """
     logging.log(logging.INFO, "Writing {} to {}.".format(filepath, target))
     device = False
     if target.startswith("/dev"):
