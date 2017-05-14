@@ -1,5 +1,26 @@
 #:kivy 1.0.9
 
+# inspired by https://gist.github.com/rohman/5300469
+<ConfirmPopup>:
+    cols: 1
+	Label:
+		text: root.text
+        text_size: (root.width, root.height)
+        halign: "left"
+        valign: "middle"
+        font_size: 18
+	GridLayout:
+		cols: 2
+		size_hint_y: None
+		Button:
+			text: 'Continue'
+			on_release: root.dispatch('on_answer', True)
+            font_size: 18
+		Button:
+			text: 'Cancel'
+			on_release: root.dispatch('on_answer', False)
+            font_size: 18
+
 <BackLabel@Label>:
     font_size: 12
     size_hint: 0.3, 0.3
@@ -121,7 +142,7 @@
             size_hint: 0.95, 0.2
             pos_hint: {'x': 0.025, 'y': 0.025}
             text: ""
-            on_press: root.flash()
+            on_press: root.ask_flash()
             background_color: (104/255, 159/255, 237/255, 1)
             font_size: 32
         

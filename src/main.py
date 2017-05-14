@@ -15,6 +15,7 @@ from kivy.properties import BooleanProperty, NumericProperty, StringProperty, Ob
 from kivy.vector import Vector
 from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.popup import Popup
 from kivy.factory import Factory
 from kivy.lang import Builder
 from kivy.animation import Animation
@@ -23,10 +24,21 @@ import usbdisks
 import write
 from releases import *
 
-DEBUG = False
-INCLUDE_FREEDOS = False
+DEBUG = True
+INCLUDE_FREEDOS = True
 
 sm = ScreenManager()
+
+# inspired by https://gist.github.com/rohman/5300469
+class ConfirmPopup(GridLayout):
+    text = StringProperty()
+    
+    def __init__(self, **kwargs):
+        self.register_event_type('on_answer')
+        super(ConfirmPopup, self).__init__(**kwargs)
+        
+    def on_answer(self, *args):
+        pass
 
 class FlashThread(threading.Thread):
     def __init__(self, source, destination, **kvargs):
@@ -114,6 +126,21 @@ class DetailMenu(Screen):
         self.back_label.color = (0, 0, 0, 0) if disabled else (1, 1, 1, 1)
         self.flash_button.text = "" if disabled else "Flash"
         
+    
+    def ask_flash(self):
+        content = ConfirmPopup(text="Warning: this will DESTROY data present on the flash disk.  Please only continue if you understand the consequences of this.")
+        content.bind(on_answer=self.answer_flash)
+        self.popup = Popup(title="Confirm action",
+                            content=content,
+                            size_hint=(0.8, 0.7),
+                            auto_dismiss=True)
+        
+        self.popup.open()
+
+    def answer_flash(self, instance, answer):
+        self.popup.dismiss()
+        if answer == True:
+            self.flash()
     
     def flash(self):
         arch = self.mainbutton_arch.text

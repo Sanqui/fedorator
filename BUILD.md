@@ -121,5 +121,7 @@ You should use the settings recommended for your printer.  Adding supports is
 recommended if you are not confident in your printer's ability to make
 bridges.
 
+### Inserting the components
 
+(TODO)
 
