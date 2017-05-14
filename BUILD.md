@@ -76,7 +76,9 @@ is about 1.5 GiB large.
 
     $ python3 releases.py
 
-(TODO: autorun)
+The Fedorator software needs to run as root and should start on system boot
+and run indefinedly.  On Raspian, this can be accomplished by adding the
+following to (TODO)
 
 ## Hardware-specific setup
 
@@ -90,6 +92,34 @@ editing the config in `~/.kivy/config.ini`.  (TODO: which lines)
 
 ## Assembly
 
-The assembly isn't particularly involved.
+The Fedorator requires some manual assembly.
 
-(TODO: write about assembly)
+The case for the Fedorator is split into two components, which may be defined as inner and outer, or bottom and top.  These two components are printed separately, but lock together when the device is constructed.
+
+The **inner part** consists of the floor, a pair of supports designated for USB connectors, and a holder for the Raspberry Pi and display pair.
+
+The **outer part** is majorly the shell and cap.  There are four holes in the shell, one for the display, two for the USB ports, and one in the back for the power cable.
+
+Both parts are designed in such a way that they fit snugly together.  The top part can be carefully put over the bottom part and holds well unless taken by force.
+
+The current version, in a misguided attempt at making assembly simple, does
+not contain any screws or fastening bolts to hold the components in place.
+Instead, if the sealing isn't tight enough, components may be fixed by other
+means, such as tightening strap.
+
+### Printing the case
+
+The case can be found in `case/case.scad`.  As a parametric object, it's
+possible to adjust the values to your liking, however keep in mind that
+there must be space reserved for cable connectors.
+
+The case is best printed from the PLA material, but ABS should work also
+if PLA is not available.  A dark blue filament color is preferred as that is
+the color of the Fedora brand.
+
+You should use the settings recommended for your printer.  Adding supports is
+recommended if you are not confident in your printer's ability to make
+bridges.
+
+
+
