@@ -5,7 +5,8 @@ components.  This means anybody from all around the world can build one,
 should they wish!
 
 Fair warning: the Fedorator is still a prototype and there are several
-known improvements planned.
+known improvements planned.  It may be a good idea to hold off on trying to
+build one until the next revision.
 
 ## Components
 
@@ -14,7 +15,8 @@ The Fedorator makes use of the following components.
  * Raspberry Pi 3 Model B
  * MicroSD card (at least 16 GB recommended)
  * 3.5 inch Raspberry Pi model B compatible touchscreen (at least 480*320)
- * Two USB extender cables (male to female)
+ * Two short USB extender cables (male to female)
+ * Micro-USB powering cable
 
 You will need to get ahold of these components yourself.  As a tip, there
 are many resellers of the Raspberry Pi around the world listed
@@ -123,5 +125,13 @@ bridges.
 
 ### Inserting the components
 
-(TODO)
+Seat the Raspberry Pi and display into the inner component.  Connect the two
+extender cables and place them onto the supports at the bottom of the device.
+Use a cable tie to hold the USB connectors in place.  Connect the Micro-USB
+cable for power to the Raspberry Pi.
+
+If everything is in order, carefully push the top part of the case into the
+bottom one.  Small adjustments may be necessary to the components if they are
+off after connecting the case.
+
 
