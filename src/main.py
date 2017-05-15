@@ -90,6 +90,7 @@ class DetailMenu(Screen):
     done = BooleanProperty()
     
     def build(self):
+        self.status_label_anim = None
         pass
     
     def on_pre_enter(self):
@@ -102,6 +103,8 @@ class DetailMenu(Screen):
         self.progress_label.text = ""
         self.status_small_label.text = ""
         self.error_label.text = ""
+        if self.status_label_anim:
+            self.status_label_anim.cancel_all(self.status_label)
         
         release = app.selected_release
         self.release_name = release['name']
@@ -215,6 +218,7 @@ class DetailMenu(Screen):
                 anim += Animation(duration=1.)
                 anim.repeat = True
                 anim.start(self.status_label)
+                self.status_label_anim = anim
                 self.status_small_label.text = "You may now safely\nremove the flash drive."
                 self.done = True
                 self.progress_clock.cancel()
