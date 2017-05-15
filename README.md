@@ -9,6 +9,13 @@ flash drive.
 
 Please see BUILD.md for instructions on how to make a Fedorator yourself.
 
+Prototype
+---
+
+![Prototype](fedorator-prototype.jpg)
+
+Photo by [@marekzehra](https://github.com/marekzehra).
+
 Concept
 ---
 
