@@ -1,5 +1,5 @@
 HIDE_SHELL = false;
-SPLIT_SHELL = false;
+SPLIT_SHELL = true;
 SPLIT_SHELL_UPSIDE_DOWN = true;
 $fn=80;
 
@@ -132,8 +132,8 @@ module shell() {
                           RPI_LENGTH+TOLERANCE - DISPLAY_MARGIN_TOP]);
                 
                 // hole for power cable in the back
-                translate([SHELL_WIDTH*0.1, SHELL_WIDTH, SHELL_THICKNESS*4])
-                    cube([CABLE_HOLE_WIDTH, CABLE_HOLE_WIDTH, CABLE_HOLE_WIDTH]);
+                translate([SHELL_WIDTH*0.1, SHELL_WIDTH, 0])
+                    cube([CABLE_HOLE_WIDTH, CABLE_HOLE_WIDTH, CABLE_HOLE_WIDTH + SHELL_THICKNESS*4]);
         
                 // holes for usb ports
                 for (i = [1, NUM_USB_PORTS]) {
