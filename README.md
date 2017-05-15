@@ -7,6 +7,8 @@ The Fedorator is a device for writing a live image of
 [Fedora](http://fedoraproject.org/), the Linux distribution, onto a USB
 flash drive.
 
+Please see BUILD.md for instructions on how to make a Fedorator yourself.
+
 Concept
 ---
 
