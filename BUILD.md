@@ -94,7 +94,7 @@ Raspbian, a common way to rotate the display is by appending `display_rotate=1` 
 `/boot/config.txt`.
 
 In case the touch screen coordinates are inverted, this can be patched in kivy by
-editing the config in `~/.kivy/config.ini`.  (TODO: which lines)
+editing the config in `~/.kivy/config.ini`.
 
 ## Assembly
 
@@ -115,9 +115,10 @@ means, such as tightening strap.
 
 ### Printing the case
 
-The case can be found in `case/case.scad`.  As a parametric object, it's
-possible to adjust the values to your liking, however keep in mind that
-there must be space reserved for cable connectors.
+The case can be found in `case/case.scad`.  It may be edited and exported
+with OpenSCAD.  As a parametric object, it's possible to adjust the values to
+your liking, however keep in mind that there must be space reserved for
+cable connectors.
 
 The case is best printed from the PLA material, but ABS should work also
 if PLA is not available.  A dark blue filament color is preferred as that is

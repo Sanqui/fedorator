@@ -139,6 +139,7 @@ class DetailMenu(Screen):
         
     
     def ask_flash(self):
+        self.error_label.text = ""
         content = ConfirmPopup(text="Warning: this will DESTROY data present on the flash disk.  Please only continue if you understand the consequences of this.")
         content.bind(on_answer=self.answer_flash)
         self.popup = Popup(title="Confirm action",
@@ -206,7 +207,7 @@ class DetailMenu(Screen):
                 app.done_writing = True
             else:
                 self.status_label.pos_hint = {'x': 0.025, 'y': 0.060}
-                self.status_label.text = "Done!"
+                self.status_label.text = "Finished!"
                 #self.status_label.color = (0, 1, 0, 1)
                 anim = Animation(color=(0, 1, 0, 1))
                 anim += Animation(duration=2.)
@@ -214,7 +215,7 @@ class DetailMenu(Screen):
                 anim += Animation(duration=1.)
                 anim.repeat = True
                 anim.start(self.status_label)
-                self.status_small_label.text = "You may now safely\nremove the flash disk."
+                self.status_small_label.text = "You may now safely\nremove the flash drive."
                 self.done = True
                 self.progress_clock.cancel()
     
