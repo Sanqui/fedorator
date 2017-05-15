@@ -218,11 +218,15 @@ class DetailMenu(Screen):
                 self.status_small_label.text = "You may now safely\nremove the flash drive."
                 self.done = True
                 self.progress_clock.cancel()
+                Clock.schedule_once(self.return_to_front, 30)
+            
+    def return_to_front(self, dt=None):
+        sm.transition.direction = 'right'
+        sm.current = 'front'
     
     def touch(self):
         if self.done:
-            sm.transition.direction = 'right'
-            sm.current = 'front'
+            self.return_to_front()
 
 class ListMenu(Screen):
     """ The menu showing the list of releases available. """
