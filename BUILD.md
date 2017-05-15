@@ -80,7 +80,11 @@ is about 1.5 GiB large.
 
 The Fedorator software needs to run as root and should start on system boot
 and run indefinedly.  On Raspian, this can be accomplished by adding the
-following to (TODO)
+following to `/etc/rc.local`:
+    
+    cd /home/pi/fedorator/src
+    source env/bin/activate
+    python3 main.py &
 
 ## Hardware-specific setup
 
