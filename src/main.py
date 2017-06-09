@@ -52,11 +52,13 @@ class FlashThread(threading.Thread):
         self.max = write.filesize(self.source)
         self.value = 0
         self.ex = None
+        self.stop = False
         
     def run(self):
         try:
             for copied in write.write(self.source, self.destination):
                 self.value += copied
+                if self.stop: return
         except Exception as ex:
             self.ex = ex
 
@@ -88,6 +90,10 @@ class DetailMenu(Screen):
     image = ObjectProperty()
     
     done = BooleanProperty()
+    stalled = BooleanProperty()
+    
+    progress_stalled_for = NumericProperty()
+    progress_value = NumericProperty()
     
     def build(self):
         self.status_label_anim = None
@@ -95,6 +101,7 @@ class DetailMenu(Screen):
     
     def on_pre_enter(self):
         self.done = False
+        self.stalled = False
         self.switch_disabled(False)
         self.progress.value = 0
         self.status_label.color = (1, 1, 1, 1)
@@ -142,6 +149,8 @@ class DetailMenu(Screen):
         
     
     def ask_flash(self):
+        filepath = self.find_release()
+        if not filepath: return
         self.error_label.text = ""
         content = ConfirmPopup(text="Warning: this will DESTROY data present on the flash disk.  Please only continue if you understand the consequences of this.")
         content.bind(on_answer=self.answer_flash)
@@ -157,7 +166,7 @@ class DetailMenu(Screen):
         if answer == True:
             self.flash()
     
-    def flash(self):
+    def find_release(self):
         arch = self.mainbutton_arch.text
         version = self.mainbutton_version.text
         
@@ -172,7 +181,7 @@ class DetailMenu(Screen):
             self.error_label.text = "Unavailable version and arch combination."
             self.error_label.color = (1, 0, 0, 1)
             self.status_label.text = ""
-            return
+            return None
         
         filename = image['link'].split('/')[-1]
         filepath = os.path.join("iso", filename)
@@ -180,7 +189,14 @@ class DetailMenu(Screen):
             self.error_label.text = "Sadly, this image is not present."
             self.error_label.color = (1, 0, 0, 1)
             self.status_label.text = ""
-            return
+            return None
+        
+        return filepath
+        
+    
+    def flash(self):
+        filepath = self.find_release()
+        if not filepath: return
         
         self.switch_disabled(True)
         
@@ -190,6 +206,7 @@ class DetailMenu(Screen):
         self.status_label.color = (1, 1, 1, 1)
         self.status_label.text = "Flashing..."
         
+        self.progress_stalled_for = 0
         self.progress_clock = Clock.schedule_interval(self.update_progress, 0.05)
     
     def update_progress(self, dt):
@@ -201,6 +218,17 @@ class DetailMenu(Screen):
             self.switch_disabled(False)
             self.progress_clock.cancel()
             return
+        new_progress_value = ft.value / ft.max
+        if self.progress_value == new_progress_value:
+            self.progress_stalled_for += dt
+        if self.progress_stalled_for > 10:
+            self.error_label.color = (1, 0, 0, 1)
+            self.error_label.text = "Progress stalled. Tap to cancel."
+            self.stalled = True
+        else:
+            self.error_label.text = ""
+            self.stalled = False
+        
         self.progress.value = ft.value / ft.max
         self.progress_label.text = "{}/{}MiB ".format(round(ft.value / (1024**2)), round(ft.max / (1024**2)))
         
@@ -229,6 +257,10 @@ class DetailMenu(Screen):
         sm.current = 'front'
     
     def touch(self):
+        if self.stalled:
+            self.flash_thread.stop = True
+            self.progress_clock.cancel()
+            self.return_to_front()
         if self.done:
             self.return_to_front()
 

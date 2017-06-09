@@ -10,6 +10,15 @@
     },
     {
         "arch": "x86_64",
+        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/test/26_Alpha/Workstation/x86_64/iso/Fedora-Workstation-Live-x86_64-26_Alpha-1.7.iso",
+        "releaseDate": "2017-04-04",
+        "sha256": "",
+        "size": "",
+        "subvariant": "Workstation_Alpha",
+        "version": "26"
+    },
+    {
+        "arch": "x86_64",
         "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/25/Workstation/x86_64/iso/Fedora-Workstation-Live-x86_64-25-1.3.iso",
         "releaseDate": "2016-11-22",
         "sha256": "818017f42a2741cfaf20e94aecf6a63d1b995abfdaff5917df7218d0d89976a7",

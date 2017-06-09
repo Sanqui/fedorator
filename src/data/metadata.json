@@ -6,6 +6,12 @@
         "icon": ""
     },
     {
+        "subvariant": "workstation_alpha",
+        "name": "Fedora Workstation 26 Alpha",
+        "summary": "The Alpha release contains all the features of Fedora 26's editions in a form that anyone can help test.",
+        "icon": "qrc:/logos/workstation"
+    },
+    {
         "subvariant": "workstation",
         "category": "product",
         "name": "Fedora Workstation",
