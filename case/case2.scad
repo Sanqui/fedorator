@@ -21,6 +21,8 @@ USB_PLUG_WITH_CABLE_LENGTH = 60;
 USB_PORT_LENGTH = 8; // approx.
 USP_PLUG_WIDTH = 30; // approx.
 USB_PLUG_HEIGHT = 5; // approx.
+USB_PORT_SCREW_HOLE_DISTANCE = 7;
+USB_PORT_SCREW_HOLE_RADIUS = 1.5 + 0.1;
 
 
 RPI_DISPLAY_BOARD_DISTANCE = 8;
@@ -40,12 +42,13 @@ DISPLAY_THICKNESS = 1.4;
 
 DISPLAY_ANCHOR_HEIGHT = 2;
 
-DISPLAY_X_MISPLACEMENT = -6.63;
+DISPLAY_X_MISPLACEMENT_INNER = 5;
+DISPLAY_X_MISPLACEMENT = -6.63 + DISPLAY_X_MISPLACEMENT_INNER;
 
 SHELL_HEIGHT1 = 50;
 SHELL_HEIGHT2 = 150 - SHELL_HEIGHT1;
 SHELL_HEIGHT = SHELL_HEIGHT1 + SHELL_HEIGHT2;
-SHELL_WIDTH = DISPLAY_BASE_WIDTH + 0.5;
+SHELL_WIDTH = DISPLAY_BASE_WIDTH + 0.5 + DISPLAY_X_MISPLACEMENT_INNER;
 SHELL_LENGTH = 135;
 SHELL_THICKNESS = 4;
 
@@ -244,6 +247,20 @@ module shell() {
                     -SHELL_THICKNESS,
                     SHELL_HEIGHT1/2-USB_PORT_HOLE[2]])
                 cube(USB_PORT_HOLE);
+            
+            // holes for screws for usb port
+            
+            translate([(SHELL_WIDTH) / 2 - (USB_PORT_HOLE[0])/2 - USB_PORT_SCREW_HOLE_DISTANCE,
+                    -SHELL_THICKNESS,
+                    SHELL_HEIGHT1/2-(USB_PORT_HOLE[2]/2)])
+            rotate([90, 0, 0])
+                cylinder(h=ANCHOR_SUPPORT_SPOT_DEPTH, r=USB_PORT_SCREW_HOLE_RADIUS);
+            
+            translate([(SHELL_WIDTH) / 2 + (USB_PORT_HOLE[0])/2 + USB_PORT_SCREW_HOLE_DISTANCE,
+                    -SHELL_THICKNESS,
+                    SHELL_HEIGHT1/2-(USB_PORT_HOLE[2]/2)])
+            rotate([90, 0, 0])
+                cylinder(h=ANCHOR_SUPPORT_SPOT_DEPTH, r=USB_PORT_SCREW_HOLE_RADIUS);
             
             // we'll do without the back wall
             
