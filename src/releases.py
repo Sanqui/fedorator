@@ -8,9 +8,9 @@ from sys import argv
 from tqdm import tqdm
 import requests
 
-VERSION = 25
+VERSION = 26
 ARCH_PRIORITY = ["x86_64", "i386"]
-SUBVARIANT_PRIORITY = ["workstation", "server", "kde", "xfce", "lxde"]
+SUBVARIANT_PRIORITY = ["workstation", "server", "python-classroom", "kde", "xfce", "lxde"]
 
 MAX_IMAGES = int(argv[1]) if len(argv) >= 2 else 10
 
@@ -42,7 +42,7 @@ def download(url):
         raise
 
 images = json.load(open("data/releases.json"))
-releases = json.load(open("data/metadata.json"))
+releases = json.load(open("data/metadata.json", encoding="utf-8"))
 
 for release in releases:
     release['images'] = []

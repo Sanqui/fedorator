@@ -24,8 +24,8 @@ import usbdisks
 import write
 from releases import *
 
-DEBUG = True
-INCLUDE_FREEDOS = True
+DEBUG = False
+INCLUDE_FREEDOS = False
 
 sm = ScreenManager()
 

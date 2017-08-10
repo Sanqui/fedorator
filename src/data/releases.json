@@ -1,5 +1,29 @@
 [
     {
+        "arch": "x86_64",
+        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/26/Workstation/x86_64/iso/Fedora-Workstation-Live-x86_64-26-1.5.iso",
+        "subvariant": "Workstation",
+        "version": "26"
+    },
+    {
+        "arch": "x86_64",
+        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/26/Server/x86_64/iso/Fedora-Server-dvd-x86_64-26-1.5.iso",
+        "subvariant": "Server",
+        "version": "26"
+    },
+    {
+        "arch": "x86_64",
+        "link": "https://download.fedoraproject.org/pub/alt/releases/26/Labs/x86_64/iso/Fedora-Python-Classroom-Live-x86_64-26-1.5.iso",
+        "subvariant": "python-classroom",
+        "version": "26"
+    },
+    {
+        "arch": "x86_64",
+        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/26/Spins/x86_64/iso/Fedora-KDE-Live-x86_64-26-1.5.iso",
+        "subvariant": "KDE",
+        "version": "26"
+    },
+    {
         "arch": "i386",
         "link": "http://www.freedos.org/freedos/files/download/fd11src.iso",
         "releaseDate": "",
@@ -7,15 +31,6 @@
         "size": "40828928",
         "subvariant": "freedos",
         "version": "1.1"
-    },
-    {
-        "arch": "x86_64",
-        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/test/26_Alpha/Workstation/x86_64/iso/Fedora-Workstation-Live-x86_64-26_Alpha-1.7.iso",
-        "releaseDate": "2017-04-04",
-        "sha256": "",
-        "size": "",
-        "subvariant": "Workstation_Alpha",
-        "version": "26"
     },
     {
         "arch": "x86_64",
