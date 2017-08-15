@@ -65,6 +65,8 @@ DISPLAY_POSITIONING = [(SHELL_WIDTH) / 2 - (RPI_WIDTH)/2,
                        0,
                        SHELL_TOP_LENGTH - SHELL_TOP_TO_DISPLAY_BOTTOM];
 
+RUBBER_FOOT_DIAMETER = 17.5;
+RUBBER_FOOT_HEIGHT = 9;
 
 
 module prism(l, w, h){
@@ -197,8 +199,8 @@ module rpi_support() {
         rpi_support_prism();
 }
 
-ANCHOR_SUPPORT_SIZE = 6;
-ANCHOR_SUPPORT_DEPTH = 4;
+ANCHOR_SUPPORT_SIZE = 8;
+ANCHOR_SUPPORT_DEPTH = 5.5;
 ANCHOR_SUPPORT_SPOT_DEPTH = 5.5;
 ANCHOR_SUPPORT_OFF_TOP = DISPLAY_ANCHOR_HEIGHT+4.5;
 
@@ -218,19 +220,77 @@ module shell_anchor_hole() {
     cylinder(h=ANCHOR_SUPPORT_SPOT_DEPTH, r=ANCHOR_SCREW_RADIUS);
 }
 
+module rubber_feet_indent() {
+    translate([-SHELL_THICKNESS/2, -SHELL_THICKNESS/2, 0]) {
+        cube([RUBBER_FOOT_DIAMETER+SHELL_THICKNESS, RUBBER_FOOT_DIAMETER+SHELL_THICKNESS, RUBBER_FOOT_HEIGHT+SHELL_THICKNESS]);
+        // screw
+        translate([SHELL_THICKNESS/2 + RUBBER_FOOT_DIAMETER/2, SHELL_THICKNESS/2 + RUBBER_FOOT_DIAMETER/2, RUBBER_FOOT_HEIGHT])
+            cylinder(h=10+TOLERANCE, r=USB_PORT_SCREW_HOLE_RADIUS+SHELL_THICKNESS/5);
+    }
+}
+
+module rubber_feet_indent_hole() {
+    translate([-TOLERANCE, -TOLERANCE, -TOLERANCE]) {
+        cube([RUBBER_FOOT_DIAMETER + TOLERANCE*2, RUBBER_FOOT_DIAMETER + TOLERANCE*2, RUBBER_FOOT_HEIGHT]);
+        // screw
+        translate([(RUBBER_FOOT_DIAMETER+TOLERANCE*2)/2, (RUBBER_FOOT_DIAMETER+TOLERANCE*2)/2, RUBBER_FOOT_HEIGHT])
+            cylinder(h=10, r=USB_PORT_SCREW_HOLE_RADIUS);
+    }
+}
+
 module shell() {
     //rounded_cube([SHELL_WIDTH, SHELL_LENGTH, SHELL_HEIGHT1], SHELL_THICKNESS, SHELL_THICKNESS);
     difference() {
-        difference() {
-            minkowski() {
-                prism(SHELL_WIDTH, SHELL_LENGTH, SHELL_HEIGHT2);
-                cylinder(r=SHELL_THICKNESS,h=SHELL_HEIGHT1+SHELL_THICKNESS);
+        union() {
+            difference() {
+                minkowski() {
+                    prism(SHELL_WIDTH, SHELL_LENGTH, SHELL_HEIGHT2);
+                    cylinder(r=SHELL_THICKNESS,h=SHELL_HEIGHT1+SHELL_THICKNESS);
+                }
+                translate([0, 0, 0])
+                minkowski() {
+                    prism(SHELL_WIDTH, SHELL_LENGTH, SHELL_HEIGHT2);
+                    cylinder(r=1,h=SHELL_HEIGHT1+SHELL_THICKNESS);
+                }
             }
-            translate([0, 0, 0])
-            minkowski() {
-                prism(SHELL_WIDTH, SHELL_LENGTH, SHELL_HEIGHT2);
-                cylinder(r=1,h=SHELL_HEIGHT1+SHELL_THICKNESS);
-            }
+            
+            // floor
+            translate([SHELL_WIDTH/2 - SHELL_WIDTH/8, -SHELL_THICKNESS, 0])
+                cube([SHELL_WIDTH/4, SHELL_LENGTH + SHELL_THICKNESS*2, SHELL_THICKNESS]);
+            translate([0, -SHELL_THICKNESS + SHELL_LENGTH/2, 0])
+                cube([SHELL_WIDTH, SHELL_LENGTH/8, SHELL_THICKNESS]);
+            
+            // prism to back wall
+            translate([-SHELL_THICKNESS*0.5, SHELL_LENGTH-SHELL_THICKNESS*2+1, 0])
+                prism(SHELL_WIDTH+SHELL_THICKNESS, SHELL_THICKNESS*2, SHELL_THICKNESS*2);
+            
+            // prism to sides
+            translate([SHELL_THICKNESS*1.5, -SHELL_THICKNESS/2, 0])
+            rotate([0, 0, 90])
+                prism(SHELL_LENGTH+SHELL_THICKNESS, SHELL_THICKNESS*2, SHELL_THICKNESS*2);
+            
+            translate([SHELL_WIDTH - SHELL_THICKNESS*1.5, SHELL_LENGTH, 0])
+            rotate([0, 0, 270])
+                prism(SHELL_LENGTH+SHELL_THICKNESS, SHELL_THICKNESS*2, SHELL_THICKNESS*2);
+            
+            
+            x1 = 0;
+            x2 = SHELL_WIDTH - RUBBER_FOOT_DIAMETER;
+            y1 = 0;
+            y2 = -SHELL_THICKNESS + SHELL_LENGTH/2;
+            y3 = SHELL_LENGTH - RUBBER_FOOT_DIAMETER - SHELL_THICKNESS/2;
+            translate([x1, y1, 0])
+                rubber_feet_indent();
+            translate([x2, y1, 0])
+                rubber_feet_indent();
+            //translate([x1, y2, 0])
+            //    rubber_feet_indent();
+            //translate([x2, y2, 0])
+            //    rubber_feet_indent();
+            translate([x1, y3, 0])
+                rubber_feet_indent();
+            translate([x2, y3, 0])
+                rubber_feet_indent();
         }
         // holes
         union() {
@@ -267,6 +327,26 @@ module shell() {
             translate([0, SHELL_LENGTH, SHELL_THICKNESS*4])
             cube([SHELL_WIDTH, SHELL_THICKNESS, SHELL_HEIGHT+SHELL_THICKNESS]);
             
+            // rubber feet indent holes
+            
+            
+            x1 = 0;
+            x2 = SHELL_WIDTH - RUBBER_FOOT_DIAMETER;
+            y1 = 0;
+            y2 = -SHELL_THICKNESS + SHELL_LENGTH/2;
+            y3 = SHELL_LENGTH - RUBBER_FOOT_DIAMETER - SHELL_THICKNESS/2;
+            translate([0, 0, 0])
+                rubber_feet_indent_hole();
+            translate([x2, 0, 0])
+                rubber_feet_indent_hole();
+            //translate([0, y2, 0])
+            //    rubber_feet_indent_hole();
+            //translate([x2, y2, 0])
+            //    rubber_feet_indent_hole();
+            translate([0, y3, 0])
+                rubber_feet_indent_hole();
+            translate([x2, y3, 0])
+                rubber_feet_indent_hole();
         }
     }
     /*
@@ -274,19 +354,13 @@ module shell() {
         cube([SHELL_WIDTH+SHELL_THICKNESS/2, SHELL_THICKNESS, SHELL_THICKNESS]);
     */
     
+    // front display hold
     translate([0, -SHELL_THICKNESS*0.5, SHELL_HEIGHT1])
     minkowski() {
         cube([SHELL_WIDTH, 0.01, SHELL_HEIGHT1*0.25]);
         cylinder(r=SHELL_THICKNESS/2,h=0.001);
     }
     
-    // floor
-    translate([SHELL_WIDTH/2 - SHELL_WIDTH/8, -SHELL_THICKNESS, 0])
-        cube([SHELL_WIDTH/4, SHELL_LENGTH + SHELL_THICKNESS*2, SHELL_THICKNESS]);
-    
-    // prism to back wall
-    translate([-SHELL_THICKNESS*0.5, SHELL_LENGTH-SHELL_THICKNESS*2+1, 0])
-        prism(SHELL_WIDTH+SHELL_THICKNESS, SHELL_THICKNESS*2, SHELL_THICKNESS*2);
     
     // anchor supports
     x1 = SHELL_THICKNESS + DISPLAY_LENGTH - (12.54 + 20.0 + 126.2);
@@ -325,7 +399,11 @@ module shell() {
         }
     }
     
-    
+    /*translate([-120, 0, 0])
+    for (i = [0 : 50])
+        translate([18*(i % 6), 0, 10 * floor(i / 6)])
+        cube([17.5, 17.5, 9]);
+    */
     //21.58 - 6.63 + SHELL_THICKNESS + ANCHOR_SUPPORT_SIZE
 }
 
@@ -368,6 +446,8 @@ rpi_support();*/
 difference() {
     shell();
     union() {
+        translate([-10, SHELL_LENGTH + SHELL_THICKNESS, 0])
+        cube([300, 100, 800]);
         /*
         translate([-10, 0, -10])
         cube([200, 200, 200]);
