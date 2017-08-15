@@ -16,12 +16,18 @@ RPI_WIDTH_FULL = RPI_WIDTH + RPI_LEFT_PORTS_WIDTH + TOLERANCE;
 
 //RPI_HEIGHT_WITH_DISPLAY = RPI_HEIGHT_FULL + DISPLAY_HEIGHT;
 
-USB_PORT_HOLE=[40, 22, 12.25];
+// TODO go over these
+
+USB_PORT_WIDTH = 36; // TODO
+USB_PORT_HEIGHT = 12.25;
+USB_PORT_HOLE=[18, 22, USB_PORT_HEIGHT]; // TODO
+USB_PORT_INDENT = 4;
 USB_PLUG_WITH_CABLE_LENGTH = 60;
 USB_PORT_LENGTH = 8; // approx.
+USB_PORT_ARM_WIDTH = 6;
 USP_PLUG_WIDTH = 30; // approx.
 USB_PLUG_HEIGHT = 5; // approx.
-USB_PORT_SCREW_HOLE_DISTANCE = 7;
+USB_PORT_SCREW_HOLE_DISTANCE = 15;
 USB_PORT_SCREW_HOLE_RADIUS = 1.5 + 0.1;
 
 
@@ -220,6 +226,64 @@ module shell_anchor_hole() {
     cylinder(h=ANCHOR_SUPPORT_SPOT_DEPTH, r=ANCHOR_SCREW_RADIUS);
 }
 
+module usb_port_indent_pillar(right=0) {
+    translate([0, -USB_PORT_INDENT, -USB_PORT_Z])
+        cube([USB_PORT_ARM_WIDTH, USB_PORT_INDENT + SHELL_THICKNESS, USB_PORT_Z + USB_PORT_HEIGHT*1.2]);
+    
+    translate([-SHELL_THICKNESS/2 + right*SHELL_THICKNESS*2, -USB_PORT_INDENT, -USB_PORT_Z])
+        cube([SHELL_THICKNESS/2, USB_PORT_INDENT+SHELL_THICKNESS, USB_PORT_Z + USB_PORT_HEIGHT*1.2]);
+}
+
+module usb_port_indent() {
+    usb_port_indent_pillar(right=0);
+    
+    translate([USB_PORT_WIDTH-USB_PORT_ARM_WIDTH, 0])
+    usb_port_indent_pillar(right=1);
+}
+
+module usb_port_screw_hole() {
+    rotate([90, 0, 0])
+        cylinder(h=ANCHOR_SUPPORT_SPOT_DEPTH, r=USB_PORT_SCREW_HOLE_RADIUS);
+}
+
+module usb_port_hole() {
+    // hole for front
+    translate([0,
+                -SHELL_THICKNESS,
+                0])
+            cube([USB_PORT_WIDTH, USB_PORT_INDENT, USB_PORT_HOLE[2]]);
+      
+    translate([USB_PORT_WIDTH/2 - USB_PORT_SCREW_HOLE_DISTANCE, USB_PORT_INDENT, USB_PORT_HEIGHT/2])
+        usb_port_screw_hole();
+    
+    translate([USB_PORT_WIDTH/2 + USB_PORT_SCREW_HOLE_DISTANCE, USB_PORT_INDENT, USB_PORT_HEIGHT/2])
+        usb_port_screw_hole();
+    /*
+    translate([0, USB_PORT_INDENT]) {
+        // hole for usb port
+        translate([(SHELL_WIDTH) / 2 - USB_PORT_HOLE_DISTANCE_MIDDLE,
+                -SHELL_THICKNESS,
+                SHELL_HEIGHT1/2-USB_PORT_HOLE[2]])
+            cube(USB_PORT_HOLE);
+        
+        // holes for screws for usb port
+        // TODO check the length on these
+        
+        translate([(SHELL_WIDTH) / 2 - USB_PORT_HOLE_DISTANCE_MIDDLE - USB_PORT_SCREW_HOLE_DISTANCE,
+                -SHELL_THICKNESS,
+                SHELL_HEIGHT1/2-(USB_PORT_HOLE[2]/2)])
+        rotate([90, 0, 0])
+            cylinder(h=ANCHOR_SUPPORT_SPOT_DEPTH, r=USB_PORT_SCREW_HOLE_RADIUS);
+        
+        translate([(SHELL_WIDTH) / 2 + USB_PORT_HOLE_DISTANCE_MIDDLE + USB_PORT_SCREW_HOLE_DISTANCE,
+                -SHELL_THICKNESS,
+                SHELL_HEIGHT1/2-(USB_PORT_HOLE[2]/2)])
+        rotate([90, 0, 0])
+            cylinder(h=ANCHOR_SUPPORT_SPOT_DEPTH, r=USB_PORT_SCREW_HOLE_RADIUS);
+    }
+    */
+}
+
 module rubber_feet_indent() {
     translate([-SHELL_THICKNESS/2, -SHELL_THICKNESS/2, 0]) {
         cube([RUBBER_FOOT_DIAMETER+SHELL_THICKNESS, RUBBER_FOOT_DIAMETER+SHELL_THICKNESS, RUBBER_FOOT_HEIGHT+SHELL_THICKNESS]);
@@ -237,6 +301,16 @@ module rubber_feet_indent_hole() {
             cylinder(h=10, r=USB_PORT_SCREW_HOLE_RADIUS);
     }
 }
+
+RUBBER_FEET_X1 = 0;
+RUBBER_FEET_X2 = SHELL_WIDTH - RUBBER_FOOT_DIAMETER;
+RUBBER_FEET_Y1 = 0;
+RUBBER_FEET_Y2 = -SHELL_THICKNESS + SHELL_LENGTH/2;
+RUBBER_FEET_Y3 = SHELL_LENGTH - RUBBER_FOOT_DIAMETER - SHELL_THICKNESS/2;
+
+USB_PORT_X1 = SHELL_WIDTH/2-USB_PORT_WIDTH - SHELL_THICKNESS;
+USB_PORT_X2 = SHELL_WIDTH/2 + SHELL_THICKNESS;
+USB_PORT_Z = SHELL_HEIGHT1/2-USB_PORT_HOLE[2];
 
 module shell() {
     //rounded_cube([SHELL_WIDTH, SHELL_LENGTH, SHELL_HEIGHT1], SHELL_THICKNESS, SHELL_THICKNESS);
@@ -269,28 +343,26 @@ module shell() {
             rotate([0, 0, 90])
                 prism(SHELL_LENGTH+SHELL_THICKNESS, SHELL_THICKNESS*2, SHELL_THICKNESS*2);
             
-            translate([SHELL_WIDTH - SHELL_THICKNESS*1.5, SHELL_LENGTH, 0])
+            translate([SHELL_WIDTH - SHELL_THICKNESS*1.5, SHELL_LENGTH+SHELL_THICKNESS/2, 0])
             rotate([0, 0, 270])
                 prism(SHELL_LENGTH+SHELL_THICKNESS, SHELL_THICKNESS*2, SHELL_THICKNESS*2);
             
             
-            x1 = 0;
-            x2 = SHELL_WIDTH - RUBBER_FOOT_DIAMETER;
-            y1 = 0;
-            y2 = -SHELL_THICKNESS + SHELL_LENGTH/2;
-            y3 = SHELL_LENGTH - RUBBER_FOOT_DIAMETER - SHELL_THICKNESS/2;
-            translate([x1, y1, 0])
+            translate([RUBBER_FEET_X1, RUBBER_FEET_Y1, 0])
                 rubber_feet_indent();
-            translate([x2, y1, 0])
+            translate([RUBBER_FEET_X2, RUBBER_FEET_Y1, 0])
                 rubber_feet_indent();
-            //translate([x1, y2, 0])
-            //    rubber_feet_indent();
-            //translate([x2, y2, 0])
-            //    rubber_feet_indent();
-            translate([x1, y3, 0])
+            translate([RUBBER_FEET_X1, RUBBER_FEET_Y3, 0])
                 rubber_feet_indent();
-            translate([x2, y3, 0])
+            translate([RUBBER_FEET_X2, RUBBER_FEET_Y3, 0])
                 rubber_feet_indent();
+            
+            
+            translate([USB_PORT_X1, 0, USB_PORT_Z])
+                usb_port_indent();
+            
+            translate([USB_PORT_X2, 0, USB_PORT_Z])
+                usb_port_indent();
         }
         // holes
         union() {
@@ -302,25 +374,10 @@ module shell() {
                     SHELL_THICKNESS,
                     SHELL_TOP_LENGTH]);
             
-            // hole for usb port
-            translate([(SHELL_WIDTH) / 2 - (USB_PORT_HOLE[0])/2,
-                    -SHELL_THICKNESS,
-                    SHELL_HEIGHT1/2-USB_PORT_HOLE[2]])
-                cube(USB_PORT_HOLE);
-            
-            // holes for screws for usb port
-            
-            translate([(SHELL_WIDTH) / 2 - (USB_PORT_HOLE[0])/2 - USB_PORT_SCREW_HOLE_DISTANCE,
-                    -SHELL_THICKNESS,
-                    SHELL_HEIGHT1/2-(USB_PORT_HOLE[2]/2)])
-            rotate([90, 0, 0])
-                cylinder(h=ANCHOR_SUPPORT_SPOT_DEPTH, r=USB_PORT_SCREW_HOLE_RADIUS);
-            
-            translate([(SHELL_WIDTH) / 2 + (USB_PORT_HOLE[0])/2 + USB_PORT_SCREW_HOLE_DISTANCE,
-                    -SHELL_THICKNESS,
-                    SHELL_HEIGHT1/2-(USB_PORT_HOLE[2]/2)])
-            rotate([90, 0, 0])
-                cylinder(h=ANCHOR_SUPPORT_SPOT_DEPTH, r=USB_PORT_SCREW_HOLE_RADIUS);
+            translate([USB_PORT_X1, 0, USB_PORT_Z])
+                usb_port_hole();
+            translate([USB_PORT_X2, 0, USB_PORT_Z])
+                usb_port_hole();
             
             // we'll do without the back wall
             
@@ -330,22 +387,14 @@ module shell() {
             // rubber feet indent holes
             
             
-            x1 = 0;
-            x2 = SHELL_WIDTH - RUBBER_FOOT_DIAMETER;
-            y1 = 0;
-            y2 = -SHELL_THICKNESS + SHELL_LENGTH/2;
-            y3 = SHELL_LENGTH - RUBBER_FOOT_DIAMETER - SHELL_THICKNESS/2;
-            translate([0, 0, 0])
+            
+            translate([RUBBER_FEET_X1, RUBBER_FEET_Y1, 0])
                 rubber_feet_indent_hole();
-            translate([x2, 0, 0])
+            translate([RUBBER_FEET_X2, RUBBER_FEET_Y1, 0])
                 rubber_feet_indent_hole();
-            //translate([0, y2, 0])
-            //    rubber_feet_indent_hole();
-            //translate([x2, y2, 0])
-            //    rubber_feet_indent_hole();
-            translate([0, y3, 0])
+            translate([RUBBER_FEET_X1, RUBBER_FEET_Y3, 0])
                 rubber_feet_indent_hole();
-            translate([x2, y3, 0])
+            translate([RUBBER_FEET_X2, RUBBER_FEET_Y3, 0])
                 rubber_feet_indent_hole();
         }
     }
@@ -446,6 +495,7 @@ rpi_support();*/
 difference() {
     shell();
     union() {
+        // XXX make it printable in lulzbot mini
         translate([-10, SHELL_LENGTH + SHELL_THICKNESS, 0])
         cube([300, 100, 800]);
         /*
