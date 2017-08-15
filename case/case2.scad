@@ -75,6 +75,16 @@ RUBBER_FOOT_DIAMETER = 17.5;
 RUBBER_FOOT_HEIGHT = 9;
 
 
+RUBBER_FEET_X1 = 0;
+RUBBER_FEET_X2 = SHELL_WIDTH - RUBBER_FOOT_DIAMETER;
+RUBBER_FEET_Y1 = 0;
+RUBBER_FEET_Y2 = -SHELL_THICKNESS + SHELL_LENGTH/2;
+RUBBER_FEET_Y3 = SHELL_LENGTH - RUBBER_FOOT_DIAMETER - SHELL_THICKNESS/2;
+
+USB_PORT_X1 = SHELL_WIDTH/2-USB_PORT_WIDTH - SHELL_THICKNESS;
+USB_PORT_X2 = SHELL_WIDTH/2 + SHELL_THICKNESS;
+USB_PORT_Z = SHELL_HEIGHT1/2-USB_PORT_HOLE[2];
+
 module prism(l, w, h){
     // from https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Primitive_Solids
     polyhedron(
@@ -226,12 +236,24 @@ module shell_anchor_hole() {
     cylinder(h=ANCHOR_SUPPORT_SPOT_DEPTH, r=ANCHOR_SCREW_RADIUS);
 }
 
+// XXX TODO calculate this properly
+ANCHOR_SUPPORT_PRISM_WIDTH = ANCHOR_SUPPORT_SIZE * 1.22;
+
+module shell_anchor_prism(length, mirror=false) {
+    height = 30;
+    translate([0, mirror ? ANCHOR_SUPPORT_PRISM_WIDTH : 0, -height])
+    rotate([90, 0, mirror ? 270 : 90])
+        prism(ANCHOR_SUPPORT_PRISM_WIDTH, height, length);
+}
+
+USB_PORT_INDENT_PILLAR_HEIGHT = USB_PORT_Z + USB_PORT_HEIGHT*1.2;
+
 module usb_port_indent_pillar(right=0) {
     translate([0, -USB_PORT_INDENT, -USB_PORT_Z])
-        cube([USB_PORT_ARM_WIDTH, USB_PORT_INDENT + SHELL_THICKNESS, USB_PORT_Z + USB_PORT_HEIGHT*1.2]);
+        cube([USB_PORT_ARM_WIDTH, USB_PORT_INDENT + SHELL_THICKNESS, USB_PORT_INDENT_PILLAR_HEIGHT]);
     
     translate([-SHELL_THICKNESS/2 + right*SHELL_THICKNESS*2, -USB_PORT_INDENT, -USB_PORT_Z])
-        cube([SHELL_THICKNESS/2, USB_PORT_INDENT+SHELL_THICKNESS, USB_PORT_Z + USB_PORT_HEIGHT*1.2]);
+        cube([SHELL_THICKNESS/2, USB_PORT_INDENT+SHELL_THICKNESS, USB_PORT_INDENT_PILLAR_HEIGHT]);
 }
 
 module usb_port_indent() {
@@ -302,15 +324,6 @@ module rubber_feet_indent_hole() {
     }
 }
 
-RUBBER_FEET_X1 = 0;
-RUBBER_FEET_X2 = SHELL_WIDTH - RUBBER_FOOT_DIAMETER;
-RUBBER_FEET_Y1 = 0;
-RUBBER_FEET_Y2 = -SHELL_THICKNESS + SHELL_LENGTH/2;
-RUBBER_FEET_Y3 = SHELL_LENGTH - RUBBER_FOOT_DIAMETER - SHELL_THICKNESS/2;
-
-USB_PORT_X1 = SHELL_WIDTH/2-USB_PORT_WIDTH - SHELL_THICKNESS;
-USB_PORT_X2 = SHELL_WIDTH/2 + SHELL_THICKNESS;
-USB_PORT_Z = SHELL_HEIGHT1/2-USB_PORT_HOLE[2];
 
 module shell() {
     //rounded_cube([SHELL_WIDTH, SHELL_LENGTH, SHELL_HEIGHT1], SHELL_THICKNESS, SHELL_THICKNESS);
@@ -331,10 +344,11 @@ module shell() {
             // floor
             translate([SHELL_WIDTH/2 - SHELL_WIDTH/8, -SHELL_THICKNESS, 0])
                 cube([SHELL_WIDTH/4, SHELL_LENGTH + SHELL_THICKNESS*2, SHELL_THICKNESS]);
-            translate([0, -SHELL_THICKNESS + SHELL_LENGTH/2, 0])
-                cube([SHELL_WIDTH, SHELL_LENGTH/8, SHELL_THICKNESS]);
+            translate([-SHELL_THICKNESS, -SHELL_THICKNESS + SHELL_LENGTH/2, 0])
+                cube([SHELL_WIDTH + SHELL_THICKNESS*2, SHELL_LENGTH/8, SHELL_THICKNESS]);
             
             // prism to back wall
+            
             translate([-SHELL_THICKNESS*0.5, SHELL_LENGTH-SHELL_THICKNESS*2+1, 0])
                 prism(SHELL_WIDTH+SHELL_THICKNESS, SHELL_THICKNESS*2, SHELL_THICKNESS*2);
             
@@ -346,6 +360,7 @@ module shell() {
             translate([SHELL_WIDTH - SHELL_THICKNESS*1.5, SHELL_LENGTH+SHELL_THICKNESS/2, 0])
             rotate([0, 0, 270])
                 prism(SHELL_LENGTH+SHELL_THICKNESS, SHELL_THICKNESS*2, SHELL_THICKNESS*2);
+            
             
             
             translate([RUBBER_FEET_X1, RUBBER_FEET_Y1, 0])
@@ -363,6 +378,12 @@ module shell() {
             
             translate([USB_PORT_X2, 0, USB_PORT_Z])
                 usb_port_indent();
+            
+            // join the two middle pillars to save on filament
+            // XXX hope this isn't in the way of any cables
+            USB_PORT_MIDDLE_PILLAR_WIDTH = SHELL_THICKNESS*2;
+            translate([SHELL_WIDTH/2-USB_PORT_MIDDLE_PILLAR_WIDTH/2, -SHELL_THICKNESS, 0])
+                cube([USB_PORT_MIDDLE_PILLAR_WIDTH, USB_PORT_INDENT+SHELL_THICKNESS, USB_PORT_INDENT_PILLAR_HEIGHT]);
         }
         // holes
         union() {
@@ -407,15 +428,15 @@ module shell() {
     translate([0, -SHELL_THICKNESS*0.5, SHELL_HEIGHT1])
     minkowski() {
         cube([SHELL_WIDTH, 0.01, SHELL_HEIGHT1*0.25]);
-        cylinder(r=SHELL_THICKNESS/2,h=0.001);
+        cylinder(r=SHELL_THICKNESS*0.5,h=0.001);
     }
     
     
     // anchor supports
-    x1 = SHELL_THICKNESS + DISPLAY_LENGTH - (12.54 + 20.0 + 126.2);
-    x2 = x1 + 126.2;
-    y1 = DISPLAY_X_MISPLACEMENT + 21.58;
-    y2 = DISPLAY_X_MISPLACEMENT + 21.58 + 65.65;
+    DISPLAY_ANCHOR_X1 = SHELL_THICKNESS + DISPLAY_LENGTH - (12.54 + 20.0 + 126.2);
+    DISPLAY_ANCHOR_X2 = DISPLAY_ANCHOR_X1 + 126.2;
+    DISPLAY_ANCHOR_Y1 = DISPLAY_X_MISPLACEMENT + 21.58;
+    DISPLAY_ANCHOR_Y2 = DISPLAY_X_MISPLACEMENT + 21.58 + 65.65;
     //y1 = DISPLAY_BASE_WIDTH + 6.63 - 21.58;
     //y2 = DISPLAY_BASE_WIDTH + 6.63 - 21.58 - 65.65;
     translate([0, 0, SHELL_HEIGHT1+SHELL_THICKNESS])
@@ -424,29 +445,51 @@ module shell() {
         translate([0, 0, DISPLAY_THICKNESS])
         difference() {
             union() {
-                translate([-SHELL_THICKNESS/2, x1 - ANCHOR_SUPPORT_SIZE/2, 0])
+                translate([-SHELL_THICKNESS/2, DISPLAY_ANCHOR_X1 - ANCHOR_SUPPORT_SIZE/2, 0])
                     shell_anchor_support();
-                translate([-SHELL_THICKNESS/2, x2 - ANCHOR_SUPPORT_SIZE/2, 0])
+                translate([-SHELL_THICKNESS/2, DISPLAY_ANCHOR_X2 - ANCHOR_SUPPORT_SIZE/2, 0])
                     shell_anchor_support();
-                translate([y1, x1, 0])
+                translate([DISPLAY_ANCHOR_Y1, DISPLAY_ANCHOR_X1, 0])
                     shell_anchor_extension();
-                translate([y1, x2, 0])
+                translate([DISPLAY_ANCHOR_Y1, DISPLAY_ANCHOR_X2, 0])
                     shell_anchor_extension();
-                translate([y2, x1, 0])
+                translate([DISPLAY_ANCHOR_Y2, DISPLAY_ANCHOR_X1, 0])
                     shell_anchor_extension();
-                translate([y2, x2, 0])
+                translate([DISPLAY_ANCHOR_Y2, DISPLAY_ANCHOR_X2, 0])
                     shell_anchor_extension();
             }
-            translate([y1, x1, 0])
+            translate([DISPLAY_ANCHOR_Y1, DISPLAY_ANCHOR_X1, 0])
                 shell_anchor_hole();
-            translate([y1, x2, 0])
+            translate([DISPLAY_ANCHOR_Y1, DISPLAY_ANCHOR_X2, 0])
                 shell_anchor_hole();
-            translate([y2, x1, 0])
+            translate([DISPLAY_ANCHOR_Y2, DISPLAY_ANCHOR_X1, 0])
                 shell_anchor_hole();
-            translate([y2, x2, 0])
+            translate([DISPLAY_ANCHOR_Y2, DISPLAY_ANCHOR_X2, 0])
                 shell_anchor_hole();
+            
         }
     }
+    
+    // prism supports for anchor arms
+    // +0.001 is a workaround for https://github.com/openscad/openscad/issues/1458
+    SHELL_ANCHOR_PRISM_X1 = -SHELL_THICKNESS/2+0.001;
+    SHELL_ANCHOR_PRISM_X2 = SHELL_WIDTH+SHELL_THICKNESS/2;
+    SHELL_ANCHOR_PRISM_Z1 = SHELL_HEIGHT1 + DISPLAY_ANCHOR_X1*cos(SHELL_ANGLE) - ANCHOR_SUPPORT_OFF_TOP - TOLERANCE + ANCHOR_SUPPORT_SIZE*cos(SHELL_ANGLE);
+    SHELL_ANCHOR_PRISM_Z2 = SHELL_HEIGHT1 + DISPLAY_ANCHOR_X2*cos(SHELL_ANGLE) - ANCHOR_SUPPORT_OFF_TOP - TOLERANCE + ANCHOR_SUPPORT_SIZE*cos(SHELL_ANGLE);
+    translate([SHELL_ANCHOR_PRISM_X1, DISPLAY_ANCHOR_X1*-sin(SHELL_ANGLE),
+         SHELL_ANCHOR_PRISM_Z1])
+        shell_anchor_prism(DISPLAY_ANCHOR_Y1 - ANCHOR_SCREW_RADIUS + SHELL_THICKNESS/2);
+    translate([SHELL_ANCHOR_PRISM_X1, DISPLAY_ANCHOR_X2*-sin(SHELL_ANGLE),
+        SHELL_ANCHOR_PRISM_Z2])
+        shell_anchor_prism(DISPLAY_ANCHOR_Y1 - ANCHOR_SCREW_RADIUS + SHELL_THICKNESS/2);
+    
+    // -0.17 is to prevent support
+    translate([SHELL_ANCHOR_PRISM_X2, DISPLAY_ANCHOR_X1*-sin(SHELL_ANGLE)-0.17,
+         SHELL_ANCHOR_PRISM_Z1])
+        shell_anchor_prism((SHELL_WIDTH-DISPLAY_ANCHOR_Y2) - ANCHOR_SCREW_RADIUS + SHELL_THICKNESS/2, mirror=true);
+    translate([SHELL_ANCHOR_PRISM_X2, DISPLAY_ANCHOR_X2*-sin(SHELL_ANGLE)-0.17,
+        SHELL_ANCHOR_PRISM_Z2])
+        shell_anchor_prism((SHELL_WIDTH-DISPLAY_ANCHOR_Y2) - ANCHOR_SCREW_RADIUS + SHELL_THICKNESS/2, mirror=true);
     
     /*translate([-120, 0, 0])
     for (i = [0 : 50])
@@ -471,7 +514,7 @@ translate([DISPLAY_X_MISPLACEMENT, 0, 0])
 translate([0, 0, SHELL_HEIGHT1+SHELL_THICKNESS])
 rotate([90+SHELL_ANGLE, 0, 0])
 translate([0, SHELL_THICKNESS, 0])
-%rpi_with_display();
+//%rpi_with_display();
 
 
 translate([200, 0, 0])// -RPI_HEIGHT_WITH_DISPLAY])
