@@ -24,6 +24,12 @@
         "version": "26"
     },
     {
+        "arch": "x86_64",
+        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/26/Spins/x86_64/iso/Fedora-Xfce-Live-x86_64-26-1.5.iso",
+        "subvariant": "xfce",
+        "version": "26"
+    },
+    {
         "arch": "i386",
         "link": "http://www.freedos.org/freedos/files/download/fd11src.iso",
         "releaseDate": "",
