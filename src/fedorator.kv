@@ -5,20 +5,20 @@
     cols: 1
 	Label:
 		text: root.text
-        text_size: (root.width, root.height)
+        text_size: (root.width*0.9, root.height)
         halign: "left"
         valign: "middle"
-        font_size: 18
+        font_size: 22
 	GridLayout:
 		cols: 2
 		size_hint_y: None
 		Button:
-			text: 'Continue'
-			on_release: root.dispatch('on_answer', True)
-            font_size: 18
-		Button:
 			text: 'Cancel'
 			on_release: root.dispatch('on_answer', False)
+            font_size: 18
+		Button:
+			text: 'Continue'
+			on_release: root.dispatch('on_answer', True)
             font_size: 18
 
 <BackLabel@Label>:
@@ -70,9 +70,9 @@
         pos: (-root.width/2 + 60 + 4, root.height * 0.05)
 
 <DetailMenu>:
-    dropdown_version:   dropdown_version
+#    dropdown_version:   dropdown_version
     dropdown_arch:      dropdown_arch
-    mainbutton_version: mainbutton_version
+#    mainbutton_version: mainbutton_version
     mainbutton_arch:    mainbutton_arch
     flash_button: flash_button
     back_button: back_button
@@ -111,24 +111,24 @@
             pos_hint: {'x': 0.0, 'y': 0.15}
             text: root.release_summary
         
-        DropDown:
-            id: dropdown_version
+#        DropDown:
+#            id: dropdown_version
             
         DropDown:
             id: dropdown_arch
         
         GridLayout:
-            size_hint: 0.9, 0.2
+            size_hint: 0.9, 0.1
             pos_hint: {'x': 0.0, 'y': 0.35}
             cols: 2
             spacing: 8
             
-            Label:
-                text: "Version"
+#            Label:
+#                text: "Version"
             
-            Button:
-                id: mainbutton_version
-                background_color: (0x3c/255, 0x6e/255, 0xb4/255, 1)
+#            Button:
+#                id: mainbutton_version
+#                background_color: (0x3c/255, 0x6e/255, 0xb4/255, 1)
             
             Label:
                 text: "Architecture"
@@ -246,26 +246,25 @@
 
 <FedoratorMenu>:
     GridLayout:
-#        cols: 1
         size_hint: 1, 1
         pos_hint: {'center_x': .5, 'center_y': .5}
         canvas:
                 
         Image:
             source: 'img/fedora.png'
-            pos: 8, -36
-            size: root.width - 16, root.height - 16
+            pos: 32, -36
+            size: root.width - 16*4, root.height - 16
             
         Label:
             font_size: 70  
             center_x: root.width / 2
-            top: root.top - 4
+            top: root.top - 24
             text: "Fedorator"
             
         Label:
             font_size: 24
             center_x: root.width / 2
-            top: root.top - 52
+            top: root.top - 86
             text: root.status_message
             halign: 'center'
             

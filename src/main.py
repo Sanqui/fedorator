@@ -3,6 +3,7 @@ import os, os.path
 import logging
 import json
 import threading
+from sys import argv
 
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
@@ -24,7 +25,7 @@ import usbdisks
 import write
 from releases import *
 
-DEBUG = False
+DEBUG = "--debug" in argv
 INCLUDE_FREEDOS = False
 
 sm = ScreenManager()
@@ -119,7 +120,7 @@ class DetailMenu(Screen):
         self.release_summary = release['summary']
         choices = {}
         
-        for parameter in ('version', 'arch'):
+        for parameter in ('arch',): #('version', 'arch'):
             dropdown = getattr(self, "dropdown_"+parameter)
             mainbutton = getattr(self, "mainbutton_"+parameter)
             options = set([image[parameter] for image in release['images']])
@@ -137,12 +138,12 @@ class DetailMenu(Screen):
             dropdown.dismiss()
         
         self.mainbutton_arch.text = DEFAULT_ARCH if DEFAULT_ARCH in choices['arch'] else choices['arch'][0]
-        self.mainbutton_version.text = str(DEFAULT_VERSION) if str(DEFAULT_VERSION) in choices['version'] else choices['version'][0]
+        #self.mainbutton_version.text = str(DEFAULT_VERSION) if str(DEFAULT_VERSION) in choices['version'] else choices['version'][0]
         
     def switch_disabled(self, disabled):
         self.flash_button.disabled = disabled
         self.back_button.disabled = disabled
-        self.mainbutton_version.disabled = disabled
+        #self.mainbutton_version.disabled = disabled
         self.mainbutton_arch.disabled = disabled
         self.back_label.color = (0, 0, 0, 0) if disabled else (1, 1, 1, 1)
         self.flash_button.text = "" if disabled else "Flash"
@@ -168,7 +169,8 @@ class DetailMenu(Screen):
     
     def find_release(self):
         arch = self.mainbutton_arch.text
-        version = self.mainbutton_version.text
+        #version = self.mainbutton_version.text
+        version = str(VERSION)
         
         release = app.selected_release
         image = None
@@ -304,7 +306,6 @@ class FedoratorMenu(Screen):
     
     def on_touch_up(self, touch):
         if self.ready:
-            #self.status_message="Touched"
             self.manager.transition.direction = 'left'
             self.manager.current = 'list'
             
@@ -370,8 +371,8 @@ class FedoratorApp(App):
         
         app.done_writing = False
         
-        if DEBUG:
-            sm.current = 'list'
+        #if DEBUG:
+        #    sm.current = 'list'
         
         fedorator_menu.update_ip(0)
         Clock.schedule_interval(fedorator_menu.update_disks, 0.5)
