@@ -94,7 +94,7 @@ Raspbian, a common way to rotate the display is by appending `display_rotate=1` 
 `/boot/config.txt`.
 
 In case the touch screen coordinates are inverted, this can be patched in kivy by
-editing the config in `~/.kivy/config.ini`.
+editing the config in `~/.kivy/config.ini` (as well as `/root/.kivy.config.ini`).
 
 ## Assembly
 

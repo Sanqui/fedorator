@@ -303,6 +303,10 @@ class FedoratorMenu(Screen):
         if self.ready:
             self.manager.transition.direction = 'left'
             self.manager.current = 'list'
+
+    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
+        if keycode[1] == "esc":
+            sys.exit()
             
     def discard_error(self, dt):
         self.error_message = False
