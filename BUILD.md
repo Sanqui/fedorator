@@ -96,47 +96,4 @@ Raspbian, a common way to rotate the display is by appending `display_rotate=1` 
 In case the touch screen coordinates are inverted, this can be patched in kivy by
 editing the config in `~/.kivy/config.ini` (as well as `/root/.kivy.config.ini`).
 
-## Assembly
-
-The Fedorator requires some manual assembly.
-
-The case for the Fedorator is split into two components, which may be defined as inner and outer, or bottom and top.  These two components are printed separately, but lock together when the device is constructed.
-
-The **inner part** consists of the floor, a pair of supports designated for USB connectors, and a holder for the Raspberry Pi and display pair.
-
-The **outer part** is majorly the shell and cap.  There are four holes in the shell, one for the display, two for the USB ports, and one in the back for the power cable.
-
-Both parts are designed in such a way that they fit snugly together.  The top part can be carefully put over the bottom part and holds well unless taken by force.
-
-The current version, in a misguided attempt at making assembly simple, does
-not contain any screws or fastening bolts to hold the components in place.
-Instead, if the sealing isn't tight enough, components may be fixed by other
-means, such as tightening strap.
-
-### Printing the case
-
-The case can be found in `case/case.scad`.  It may be edited and exported
-with OpenSCAD.  As a parametric object, it's possible to adjust the values to
-your liking, however keep in mind that there must be space reserved for
-cable connectors.
-
-The case is best printed from the PLA material, but ABS should work also
-if PLA is not available.  A dark blue filament color is preferred as that is
-the color of the Fedora brand.
-
-You should use the settings recommended for your printer.  Adding supports is
-recommended if you are not confident in your printer's ability to make
-bridges.
-
-### Inserting the components
-
-Seat the Raspberry Pi and display into the inner component.  Connect the two
-extender cables and place them onto the supports at the bottom of the device.
-Use a cable tie to hold the USB connectors in place.  Connect the Micro-USB
-cable for power to the Raspberry Pi.
-
-If everything is in order, carefully push the top part of the case into the
-bottom one.  Small adjustments may be necessary to the components if they are
-off after connecting the case.
-
 
