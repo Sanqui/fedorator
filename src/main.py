@@ -128,6 +128,9 @@ class DetailMenu(Screen):
             dropdown.clear_widgets()
             choices[parameter] = []
             for option in options:
+                if parameter == "arch":
+                    filepath = get_image_path(release, version=VERSION, arch=option)
+                    if not filepath: continue
                 choices[parameter].append(option)
                 btn = Button(text=option, size_hint_y=None, height=48, background_color=(0x3c/255, 0x6e/255, 0xb4/255, 1))
                 btn.bind(on_release=lambda btn, d=dropdown: d.select(btn.text))
@@ -153,7 +156,7 @@ class DetailMenu(Screen):
         filepath = self.find_release()
         if not filepath: return
         self.error_label.text = ""
-        content = ConfirmPopup(text="Warning: this will DESTROY data present on the flash disk.  Please only continue if you understand the consequences of this.")
+        content = ConfirmPopup(text="Warning: this will DESTROY data present on the flash drive.  Please only continue if you understand the consequences of this.")
         content.bind(on_answer=self.answer_flash)
         self.popup = Popup(title="Confirm action",
                             content=content,
@@ -173,25 +176,13 @@ class DetailMenu(Screen):
         version = str(VERSION)
         
         release = app.selected_release
-        image = None
-        for i in release['images']:
-            if i['arch'] == arch and i['version'] == version \
-              and 'netinst' not in i['link']:
-                image = i
         
-        if not image:
-            self.error_label.text = "Unavailable version and arch combination."
-            self.error_label.color = (1, 0, 0, 1)
-            self.status_label.text = ""
-            return None
+        filepath = get_image_path(release, version=version, arch=arch)
         
-        filename = image['link'].split('/')[-1]
-        filepath = os.path.join("iso", filename)
-        if not os.path.isfile(filepath):
+        if not filepath:
             self.error_label.text = "Sadly, this image is not present."
             self.error_label.color = (1, 0, 0, 1)
             self.status_label.text = ""
-            return None
         
         return filepath
         
@@ -272,6 +263,10 @@ class ListMenu(Screen):
         self.release_grid.bind(minimum_height=self.release_grid.setter('height'))
         for metadata in releases:
             if metadata['subvariant'] == 'freedos' and not INCLUDE_FREEDOS:
+                continue
+            
+            if not get_image_path(metadata, version=VERSION, arch=None):
+                # no ISO downloaded for this release
                 continue
             btn = ReleaseButton()
             btn.text = metadata['name']
@@ -370,9 +365,6 @@ class FedoratorApp(App):
         sm.add_widget(detail_menu)
         
         app.done_writing = False
-        
-        #if DEBUG:
-        #    sm.current = 'list'
         
         fedorator_menu.update_ip(0)
         Clock.schedule_interval(fedorator_menu.update_disks, 0.5)

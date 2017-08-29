@@ -18,27 +18,6 @@ DEFAULT_VERSION = VERSION
 DOWNLOAD_DIRECTORY = "iso"
 BUFFSIZE = (1024 ** 2) * 4 # 4MB
 
-def download(url):
-    """ Download a file while reporting progress. """
-    filename = url.split('/')[-1]
-    filepath = path.join(DOWNLOAD_DIRECTORY, filename)
-    try:
-        f = open(filepath, "wb")
-        
-        r = requests.get(url, stream=True)
-        
-        filesize = int(r.headers['Content-length'])
-        
-        
-        with tqdm(total=filesize/BUFFSIZE*4, unit='MiB') as pbar:
-            for chunk in r.iter_content(chunk_size=BUFFSIZE):
-                if chunk:
-                    f.write(chunk)
-                    pbar.update(4)
-    except:
-        os.remove(filepath)
-        raise
-
 images = json.load(open("data/releases.json"))
 releases = json.load(open("data/metadata.json", encoding="utf-8"))
 
@@ -67,6 +46,46 @@ for subvariant in SUBVARIANT_PRIORITY:
 for image in images:
     if not image in images_by_priority:
         images_by_priority.append(image)
+
+def get_image_path(release, version, arch=None):
+    version = str(version)
+    image = None
+    for i in release['images']:
+        if (i['arch'] == arch or not arch) and i['version'] == version \
+          and 'netinst' not in i['link']:
+            image = i
+    
+    if not image:
+        return None
+    
+    filename = image['link'].split('/')[-1]
+    filepath = os.path.join("iso", filename)
+    if not os.path.isfile(filepath):
+        return None
+    
+    return filepath
+    
+
+def download(url):
+    """ Download a file while reporting progress. """
+    filename = url.split('/')[-1]
+    filepath = path.join(DOWNLOAD_DIRECTORY, filename)
+    try:
+        f = open(filepath, "wb")
+        
+        r = requests.get(url, stream=True)
+        
+        filesize = int(r.headers['Content-length'])
+        
+        
+        with tqdm(total=filesize/BUFFSIZE*4, unit='MiB') as pbar:
+            for chunk in r.iter_content(chunk_size=BUFFSIZE):
+                if chunk:
+                    f.write(chunk)
+                    pbar.update(4)
+    except:
+        os.remove(filepath)
+        raise
 
 if __name__ == '__main__':
     MAX_IMAGES = int(argv[1]) if len(argv) >= 2 else 10

@@ -11,21 +11,21 @@
         text_size: (root.width*0.9, root.height)
         halign: "left"
         valign: "middle"
-        font_size: 22
+        font_size: 24
 	GridLayout:
 		cols: 2
 		size_hint_y: None
 		Button:
 			text: 'Cancel'
 			on_release: root.dispatch('on_answer', False)
-            font_size: 18
+            font_size: 20
 		Button:
 			text: 'Continue'
 			on_release: root.dispatch('on_answer', True)
-            font_size: 18
+            font_size: 20
 
 <BackLabel@Label>:
-    font_size: 12
+    font_size: 14
     size_hint: 0.3, 0.3
     text_size: 64, 32
     halign: "left"
@@ -65,7 +65,7 @@
         halign: "left"
         valign: "middle"
         text: root.text
-        font_size: 20
+        font_size: 24
     
     Image:
         source: root.source
@@ -102,13 +102,13 @@
                 root.manager.current = 'list'
         
         Label:
-            font_size: 32
+            font_size: 34
             text_size: root.width * 0.6, None
             pos_hint: {'x': 0.20, 'y': 0.35}
             text: root.release_name
         
         Label:
-            font_size: 18
+            font_size: 20
             text_size: root.width * 0.9, None
             
             pos_hint: {'x': 0.0, 'y': 0.15}
@@ -147,7 +147,7 @@
             text: ""
             on_press: root.ask_flash()
             background_color: (104/255, 159/255, 237/255, 1)
-            font_size: 32
+            font_size: 34
         
         Label:
             id: error_label
@@ -170,7 +170,7 @@
             
             size_hint: 0.95, 0.2
             pos_hint: {'x': 0.025, 'y': 0.055}
-            font_size: 30
+            font_size: 32
         
         Label:
             id: status_small_label
@@ -183,7 +183,7 @@
             
             size_hint: 0.95, 0.15
             pos_hint: {'x': 0.025, 'y': 0.0}
-            font_size: 16
+            font_size: 18
         
         Label:
             id: progress_label
@@ -191,7 +191,7 @@
             text_size: self.size
             halign: 'right'
             valign: 'middle'
-            font_size: 12
+            font_size: 14
             color: (1, 1, 1, 0.5)
         
         ProgressBar:
@@ -229,7 +229,7 @@
                 root.manager.current = 'front'
         
         Label:
-            font_size: 32
+            font_size: 34
             text_size: root.width * 0.6, None
             pos_hint: {'x': 0.25, 'y': 0.35}
             text: "Please choose a release"
@@ -259,13 +259,13 @@
             size: root.width - 16*4, root.height - 16
             
         Label:
-            font_size: 70  
+            font_size: 74 
             center_x: root.width / 2
             top: root.top - 24
             text: "Fedorator"
             
         Label:
-            font_size: 24
+            font_size: 26
             center_x: root.width / 2
             top: root.top - 86
             text: root.status_message
@@ -273,7 +273,7 @@
             
         
         Label:
-            font_size: 16
+            font_size: 18
             text_size: 128, 64
             pos: 32, -12
             halign: 'left'
@@ -281,7 +281,7 @@
             text: root.left_disk_text
             
         Label:
-            font_size: 16
+            font_size: 18
             text_size: 128, 64
             pos: root.width - 128, -12
             halign: 'right'
