@@ -2,7 +2,7 @@
     {
         "arch": "x86_64",
         "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-WORK-x86_64-20170927.iso",
-        "subvariant": "Workstation",
+        "subvariant": "WORK-latest",
         "version": "26"
     },
     {
@@ -20,140 +20,58 @@
     {
         "arch": "x86_64",
         "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-KDE-x86_64-20170927.iso",
-        "subvariant": "KDE",
+        "subvariant": "KDE-latest",
         "version": "26"
     },
     {
         "arch": "x86_64",
         "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-XFCE-x86_64-20170927.iso",
-        "subvariant": "XFCE",
+        "subvariant": "XFCE-latest",
         "version": "26"
     },
     {
         "arch": "x86_64",
-        "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-WORK-x86_64-20170927.iso",
-        "releaseDate": "2017-09-29",
-        "sha512": "c7ce66fb93abbf4987e71bb4b7783dffb696098af539c588594e8952ff251a653895936621ffa615211ca693a89d493bc7622e9ce65c18da4b4cf2c1f34feb56",
-        "size": "1500512256",
-        "subvariant": "Workstation",
+        "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-MATE-x86_64-20170927.iso",
+        "subvariant": "MATE-latest",
         "version": "26"
     },
-## TODO Update to F26 Work-netinst.
-#    {
-#        "arch": "x86_64",
-#        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/26/Workstation/x86_64/iso/Fedora-Workstation-netinst-x86_64-26-1.5.iso",
-#        "releaseDate": "2016-11-22",
-#        "sha256": "6a1e69416b0d72efd2962ce01bdad547074a32b70f7d70e2e6436d16398522a7",
-#        "size": "486539264",
-#        "subvariant": "Workstation",
-#        "version": "26"
+    {
+        "arch": "x86_64",
+        "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-LXDE-x86_64-20170927.iso",
+        "subvariant": "LXDE-latest",
+        "version": "26"
      },
-#    {
-#        "arch": "armhfp",
-#        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/25/Workstation/armhfp/images/Fedora-Workstation-armhfp-25-1.3-sda.raw.xz",
-#        "releaseDate": "2016-11-22",
-#        "sha256": "553885d5643de06c468997f0e6a0bc1f1ba759d5ed806ac4d3f115522dfd6fbf",
-#        "size": "1253551936",
-#        "subvariant": "Workstation",
-#        "version": "25"
-#    },
-#    {
-#        "arch": "x86_64",
-#        "link": "https://download.fedoraproject.org/pub/alt/releases/25/Cloud/x86_64/iso/Fedora-Cloud-netinst-x86_64-25-1.3.iso",
-#        "releaseDate": "2016-11-22",
-#        "sha256": "4d3413ed81e89baf79efa4c0217ad652967699b5072147ae3eeef7e075e3723d",
-#        #"size": "503316480",
-#        "subvariant": "Cloud",
-#        "version": "25"
-#    },
-#    {
-#        "arch": "x86_64",
-#        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/26/Server/x86_64/iso/Fedora-Server-dvd-x86_64-26-1.5.iso",
-#        "releaseDate": "2016-11-22",
-#        "sha256": "524bd959dae09ad6fc8e0476ea478700d89f82ec5795d0b1a7b873613f3f26ac",
-#        "size": "2018508800",
-#        "subvariant": "Server",
-#        "version": "26"
-#    },
-#    {
-#        "arch": "x86_64",
-#        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/25/Server/x86_64/iso/Fedora-Server-netinst-x86_64-25-1.3.iso",
-#        "releaseDate": "2016-11-22",
-#        "sha256": "86bc3694f4938382753d1e9536f2140a6c9c1978207766340c679a89509073c7",
-#        "size": "507510784",
-#        "subvariant": "Server",
-#       "version": "25"
-#    },
-#    {
-#        "arch": "x86_64",
-#        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/25/Everything/x86_64/iso/Fedora-Everything-netinst-x86_64-25-1.3.iso",
-#        "releaseDate": "2016-11-22",
-#        "sha256": "2eaf3c174a2020fa085c11e563ced85925a1fd66049de6d31bba5d655704d6ce",
-#        "size": "500170752",
-#        "subvariant": "Everything",
-#        "version": "25"
-#    },
-     {
-        "arch": "x86_64",
-        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/25/CloudImages/x86_64/images/Fedora-Cloud-Base-25-1.3.x86_64.qcow2",
-        "releaseDate": "2016-11-22",
-        "sha256": "4942be57a97c7e6f9f420ba29555776c79ed49c603d7cabb0394bb1a790eb336",
-        "size": "196662784",
-        "subvariant": "Cloud_Base",
-        "version": "25"
+    {
+        "arch": "armhfp",
+        "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-LXQT-x86_64-20170927.iso",
+       	"subvariant": "LXQT-latest",
+        "version": "26"
     },
     {
         "arch": "x86_64",
-        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/25/CloudImages/x86_64/images/Fedora-Cloud-Base-25-1.3.x86_64.raw.xz",
-        "releaseDate": "2016-11-22",
-        "sha256": "01c8a1087f3621365939ecec7bfc8a5a57289a1443eff391a06ab39656e65739",
-        "size": "128638192",
-        "subvariant": "Cloud_Base",
-        "version": "25"
+        "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-CINN-x86_64-20170927.iso",
+        "subvariant": "CINN-latest",
+        "version": "26"
     },
     {
         "arch": "x86_64",
-        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/25/CloudImages/x86_64/images/Fedora-Cloud-Base-Vagrant-25-1.3.x86_64.vagrant-libvirt.box",
+        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/26/Server/x86_64/iso/Fedora-Server-dvd-x86_64-26-1.5.iso",
         "releaseDate": "2016-11-22",
-        "sha256": "148a4c3744f7b4de24e745541e94d9aadfd0e0a22069065b607c94ec8e493db6",
-        "size": "208633544",
-        "subvariant": "Cloud_Base",
-        "version": "25"
+        "sha256": "524bd959dae09ad6fc8e0476ea478700d89f82ec5795d0b1a7b873613f3f26ac",
+        "size": "2018508800",
+        "subvariant": "Server",
+        "version": "26"
     },
     {
         "arch": "x86_64",
-        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/25/CloudImages/x86_64/images/Fedora-Cloud-Base-Vagrant-25-1.3.x86_64.vagrant-virtualbox.box",
-        "releaseDate": "2016-11-22",
-        "sha256": "390addeab171fadec4d5901e9eb2054bd955efeebc6a8b2231c7881803245d38",
-        "size": "217845760",
-        "subvariant": "Cloud_Base",
-        "version": "25"
+        "link": "https://dl.fedoraproject.org/pub/alt/releases/26/Labs/x86_64/iso/Fedora-Astronomy_KDE-Live-x86_64-26-1.5.iso",
+        "subvariant": "Astronomy",
+        "version": "26"
     },
     {
-        "arch": "x86_64",
-        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/25/Docker/x86_64/images/Fedora-Docker-Base-25-1.3.x86_64.tar.xz",
-        "releaseDate": "2016-11-22",
-        "sha256": "0d1910416a63920b0c2d8398d37d9440e74283ba83ba442dc84047987f7d1165",
-        "size": "41764492",
-        "subvariant": "Docker_Base",
-        "version": "25"
-    },
-    {
-        "arch": "x86_64",
-        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/25/Spins/x86_64/iso/Fedora-Cinnamon-Live-x86_64-25-1.3.iso",
-        "releaseDate": "2016-11-22",
-        "sha256": "7d859d84fbd036da772a8ab3e4c1731e4aef5051ef37acb38f9df4209237390e",
-        "size": "1422917632",
-        "subvariant": "Cinnamon",
-        "version": "25"
-    },
-    {
-        "arch": "x86_64",
-        "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/25/Spins/x86_64/iso/Fedora-KDE-Live-x86_64-25-1.3.iso",
-        "releaseDate": "2016-11-22",
-        "sha256": "2345e79043a36980c535f74ef63613f9dd22f4ecb8ccdf3df5cb5199ca4c75b7",
-        "size": "1389363200",
-        "subvariant": "KDE",
+	"arch": "x86_64", 
+	"link":"/download.fedoraproject.org/pub/fedora/linux/releases/25/Spins/x86_64/iso/Fedora-KDE-Live-x86_64-25-1.3.iso",
+	"subvariant": "KDE",
         "version": "25"
     },
     {
