@@ -1,29 +1,28 @@
 [
-## "TODO": "Update SHA256|512sums, GA releaseDate, size values",
     {
 	"arch": "x86_64",
         "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-WORK-x86_64-20171005.iso",
         "releaseDate": "20171005",
 	"sha512": :"af22e38f3ce74dda3fc4a784e2bb3a19179ea2413de18d4e16f2a6f9e4d2781c27191693ec22ad206d35dd7688d704e2c8557519bea1e2b6f85a5f956f504855",
-	"size":"",
+	"size":"1737490432",
 	"subvariant": "WORK-latest",
         "version": "26"
     },
     {
         "arch": "x86_64",
         "link": "https://download.fedoraproject.org/pub/fedora/linux/releases/26/Server/x86_64/iso/Fedora-Server-dvd-x86_64-26-1.5.iso",
-        "releaseDate": "",
-	"sha256": "",
-	"size":" ",
+        "releaseDate": "20170707",
+	"sha256": "fad18a43b9cec152fc8a1fd368950eaf59be66b1a15438149a0c3a509c56cf2f",
+	"size":"2401239040",
 	"subvariant": "Server-traditional",
         "version": "26"
     },
     {
         "arch": "x86_64",
         "link": "https://download.fedoraproject.org/pub/alt/releases/26/Labs/x86_64/iso/Fedora-Python-Classroom-Live-x86_64-26-1.5.iso",
-        "releaseDate": "",
-	"sha256": "",
-	"size": "",
+        "releaseDate": "20170705",
+	"sha256": "cc31eff029ff4e80f1c1cfb4885f108be7e359fa5179a7b14fdd85291a48fb6a",
+	"size": "1482686464",
 	"subvariant": "python-classroom",
         "version": "26"
     },
@@ -32,7 +31,7 @@
         "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-KDE-x86_64-20170927.iso",
         "releaseDate": "20170927",
 	"sha512": "d2ba1dd9960fddb950da54756df2f4744d884bb88af26066c0456b5d2a080e8eb415868e82a78533ba8aa165b726d321738fca3164fd7dc8c690b06b315865d3",
-	"size":"",
+	"size":"1507852288",
 	"subvariant": "KDE-latest",
         "version": "26",
 	"note":"Failed to build 20171005"
@@ -40,9 +39,9 @@
     {
         "arch": "x86_64",
         "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-XFCE-x86_64-20171005.iso",
-        "releaseDate": "",
+        "releaseDate": "20171005",
 	"sha512": "00b23af417ec1892a9d48a32dbfd12b848dfcbf1888636f849ec6a2ce419417d2a0337e8048885253a8dc12bd456e41aeb8bd28dede9c9ff60b12c4e40871415",
-	"size": "",
+	"size": "1373634560",
 	"subvariant": "XFCE-latest",
         "version": "26"
     },
@@ -51,7 +50,7 @@
         "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-MATE-x86_64-20170927.iso",
         "releaseDate": "",
 	"sha512": "91c24c654ba202ed7d22a057ea088d50a31752f1500a30806897a2ed705ac476e472c81f05f7c72f9e47b3671eebda0743d958bcbab6d8a612324b1b893e6580",
-	"size":"",
+	"size":"1647312896",
 	"subvariant": "MATE-latest",
         "version": "26",
 	"note": "Failed to build 20171005"
@@ -61,7 +60,7 @@
         "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-LXDE-x86_64-20171005.iso",
         "releaseDate": "20171005".
 	"sha512":"687f9d07fc7a6af79c9a796c283bea2367b2d0fbdfd1521144a1272a2c650f6382ddbaff979412621693e662e24cd82bf68b34370e04f718b5c52c9e6922907b",
-	"size":"",
+	"size":"1048576000",
 	"subvariant": "LXDE-latest",
         "version": "26"
      },
@@ -69,9 +68,18 @@
         "arch": "x86_64",
         "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-LXQT-x86_64-20171005.iso",
        	"releaseDate": "20171005",
-	"sha512": "",
+	"sha512": "930a2ccadc839fbc649d6115c577c4f106c0c8dc515dbc431c10431d538e591ae0f1ec1b980e9248469b9025954ef591f86e55d14959fd4b06cf174aabb69a0c",
 	"size":"930a2ccadc839fbc649d6115c577c4f106c0c8dc515dbc431c10431d538e591ae0f1ec1b980e9248469b9025954ef591f86e55d14959fd4b06cf174aabb69a0c",
 	"subvariant": "LXQT-latest",
+        "version": "26"
+    },
+    {
+        "arch": "x86_64",
+        "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-SOAS-x86_64-20171005.iso",
+        "releaseDate": "20171005",
+        "sha512": "1ae9d432a5afd3028f459bd704695232aff4c139d3f807ed029506b4b939ce98a932ffc49761bfd4bbc11a3570f0813426398a8729f9a106631286a4e3662b64",
+        "size": "900726784",
+        "subvariant": "SOAS-latest",
         "version": "26"
     },
     {
@@ -79,7 +87,7 @@
         "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-CINN-x86_64-20171005.iso",
         "releaseDate": "20171005",
         "sha512": "da82ecf0b9466ecb1392f341182359872c46a95064df921110eac06a0e507c4b1ef6e554d6b0585a097511bbe964f5a966c5227e7981fddec8bc55958cf4e2e9",
-	"size": "",
+	"size": "1535115264",
 	"subvariant": "CINN-latest",
         "version": "26"
     },
@@ -95,59 +103,47 @@
     {
         "arch": "x86_64",
         "link": "https://dl.fedoraproject.org/pub/alt/releases/26/Labs/x86_64/iso/Fedora-Astronomy_KDE-Live-x86_64-26-1.5.iso",
-        "releaseDate": "",
-	"sha256": "" ,
-	"size": "",
+        "releaseDate": "20170707",
+	"sha256": "70a9a4447db6473cad73065d42cadd6d4460fbd1a487f6d2a17a4c39708b94fb" ,
+	"size": "2668625920",
 	"subvariant": "Astronomy",
         "version": "26"
     },
     {
-## "TODO":"Update for KDE_JAM",
 	"arch": "x86_64", 
-	"link":"",
-	"releaseDate":"",
-	"sha256":"",
-	"size":"",
-	"subvariant": "KDE-Jam",
+	"link":"https://download-ib01.fedoraproject.org/pub/alt/releases/26/Labs/x86_64/iso/Fedora-Robotics-Live-x86_64-26-1.5.iso",
+	"releaseDate":"20170707",
+	"sha256":"e458747d2df50fb7db91393c849d032a80ec0e3a3f8652b550cf1a8b94be857e",
+	"size":"2552233984",
+	"subvariant": "Robotics",
         "version": "26"
     },
     {
-## "TODO":"Update for Security Spin",
         "arch": "x86_64",
-        "link": "",
-        "releaseDate": "",
-        "sha256": "",
-        "size": "",
+        "link": "https://download-ib01.fedoraproject.org/pub/alt/releases/26/Labs/x86_64/iso/Fedora-Security-Live-x86_64-26-1.5.iso",
+        "releaseDate": "20170707",
+        "sha256": "55f4bb83f36a8963e8f0a7fb31107f4ce97b5c9c8716101a36038bd17728d2d1",
+        "size": "1245708288",
         "subvariant": "SecurityLab",
         "version": "26"
     },
     {
-## "TODO":"Update for Design_Suite",
         "arch": "x86_64",
-        "link": "",
-        "releaseDate": "",
-        "sha256": "",
-        "size": "",
+        "link": "https://download-ib01.fedoraproject.org/pub/alt/releases/26/Labs/x86_64/iso/Fedora-Design_suite-Live-x86_64-26-1.5.iso",
+        "releaseDate": "20170707",
+        "sha256": "12d67c6e579854fe5e211e6543ac551f186f59bee866bfa51222e9a4b86a5ec1",
+        "size": "2139095040",
         "subvariant": "Design_Suite",
         "version": "26"
     },
     {
+
         "arch": "x86_64",
-        "link": "https://alt.fedoraproject.org/pub/alt/live-respins/F26-SOAS-x86_64-20171005.iso",
-        "releaseDate": "20171005",
-        "sha256": "",
-        "size": "",
-        "subvariant": "SOAS",
-        "version": "26"
-    },
-    {
-## "TODO":"Update for Scientific_KDE",
-        "arch": "x86_64",
-        "link": "",
-        "releaseDate": "",
-        "sha256": "",
-        "size": "",
+        "link": "https://download-ib01.fedoraproject.org/pub/alt/releases/26/Labs/x86_64/iso/Fedora-Games-Live-x86_64-26-1.5.iso",
+        "releaseDate": "20170707",
+        "sha256": "300f97fe6d946d04e8ff92c1d7cc7d80e7365cfb62cdee3da8604bf1531f358c",
+        "size": "4129292288",
 	"subvariant": "Scientific_KDE",
         "version": "26"
-    },
+   }
 ]
