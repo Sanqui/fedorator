@@ -87,6 +87,7 @@ class DetailMenu(Screen):
     release_name = StringProperty()
     release_image = StringProperty()
     release_summary = StringProperty()
+    version = StringProperty()
     flash_thread = ObjectProperty()
     image = ObjectProperty()
     
@@ -118,6 +119,7 @@ class DetailMenu(Screen):
         self.release_name = release['name']
         self.release_image = release['image']
         self.release_summary = release['summary']
+        self.version = VERSION
         choices = {}
         
         for parameter in ('arch',): #('version', 'arch'):
@@ -265,7 +267,7 @@ class ListMenu(Screen):
             if metadata['subvariant'] == 'freedos' and not INCLUDE_FREEDOS:
                 continue
             
-            if not get_image_path(metadata, version=VERSION, arch=None):
+            if not have_any_image(metadata, version=VERSION):
                 # no ISO downloaded for this release
                 continue
             btn = ReleaseButton()

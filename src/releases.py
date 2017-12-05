@@ -22,6 +22,8 @@ MINIMUM_FREE_SPACE = 64*1024*1024 # keep 64MiB
 DOWNLOAD_DIRECTORY = "iso"
 BUFFSIZE = (1024 ** 2) * 4 # 4MB
 
+TOUCH_ONLY = False
+
 total_space, used_space, free_space = disk_usage(DOWNLOAD_DIRECTORY)
 #releases_json = requests.get("https://getfedora.org/releases.json").json()
 
@@ -87,14 +89,13 @@ for image in images_by_priority:
       else:
           break
 
-def get_image_path(release, version, arch=None):
+def get_image_path(release, version, arch):
     version = str(version)
     image = None
     for i in release['images']:
-        if (i['arch'] == arch or not arch) and i['version'] == version \
+        if i['arch'] == arch and i['version'] == version \
           and 'netinst' not in i['link']:
             image = i
-    
     if not image:
         return None
     
@@ -104,12 +105,20 @@ def get_image_path(release, version, arch=None):
         return None
     
     return filepath
-    
+
+def have_any_image(release, version):
+    for arch in ARCH_PRIORITY:
+        if get_image_path(release, version, arch):
+            return True
+    return False
 
 def download(url):
     """ Download a file while reporting progress. """
     filename = url.split('/')[-1]
     filepath = path.join(DOWNLOAD_DIRECTORY, filename)
+    if TOUCH_ONLY:
+        open(filepath, "w")
+        return
     try:
         f = open(filepath, "wb")
         
