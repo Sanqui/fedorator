@@ -4,3 +4,4 @@ env/
 *.pyc
 *.iso
 src/dummy
+src/data/releases.json
