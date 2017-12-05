@@ -71,6 +71,7 @@ for subvariant in SUBVARIANT_PRIORITY:
 
 for image in images:
     if not image in images_by_priority \
+      and image['version'] == str(VERSION) \
       and image['filename'].endswith('.iso'):
         images_by_priority.append(image)
 
