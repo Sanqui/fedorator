@@ -3,6 +3,7 @@ import os, os.path
 import logging
 import json
 import threading
+import sys
 from sys import argv
 
 from kivy.app import App
@@ -302,6 +303,16 @@ class FedoratorMenu(Screen):
     error_message = BooleanProperty(False)
     
     def on_touch_up(self, touch):
+        if touch.is_triple_tap:
+            content = ConfirmPopup(text="Quit Fedorator?")
+            content.bind(on_answer=self.answer_quit)
+            self.popup = Popup(title="Confirm action",
+                                content=content,
+                                size_hint=(0.8, 0.7),
+                                auto_dismiss=True)
+            
+            self.popup.open()
+            
         if self.ready:
             self.manager.transition.direction = 'left'
             self.manager.current = 'list'
@@ -309,7 +320,12 @@ class FedoratorMenu(Screen):
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         if keycode[1] == "esc":
             sys.exit()
-            
+    
+    def answer_quit(self, instance, answer):
+        self.popup.dismiss()
+        if answer == True:
+            sys.exit()
+    
     def discard_error(self, dt):
         self.error_message = False
     
