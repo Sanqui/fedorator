@@ -8,6 +8,8 @@ The Fedorator is a device for writing a live image of
 flash drive.  It acts as a multimedia hub on Fedora booths at tech conferences
 and trade shows.
 
+**Fedorator is no longer maintained.**  If you're looking for a similar project, check out [SyncStar](https://github.com/gridhead/syncstar/)!
+
 Mailing List
 ---
 
